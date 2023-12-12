@@ -1,20 +1,17 @@
 import { type Page, type Locator , expect } from '@playwright/test';
 
-
-
-export class HomePage {
+export class AlertPage {
     readonly page: Page;
     readonly url: string;
-    readonly pageTitle:string;
-    readonly cardAlerts:Locator;
+    readonly headerText:string;
+    readonly header :Locator;
 
     constructor(page: Page) {
       this.page = page;
-      this.url = "/";
+      this.url = "/alertsWindows";
     //   this.url = process.env.BASE_URL + "/";
-      this.pageTitle = 'DEMOQA'
-      this.cardAlerts = page.getByRole('heading', { name: 'Alerts, Frame & Windows' })
-
+      this.headerText = 'Alerts, Frame & Windows';
+      this.header = page.getByText('Alerts, Frame & Windows').first()
     }
 
     async load(){
@@ -22,10 +19,10 @@ export class HomePage {
     }
 
     async assertPageTitle() {
-      await expect(this.page).toHaveTitle(this.pageTitle);
+      await expect(this.header).toHaveText(this.headerText);
     }
 
 
   }
 
-  export default HomePage
+  export default AlertPage

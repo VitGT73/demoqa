@@ -2,18 +2,17 @@ import { type Page, type Locator , expect } from '@playwright/test';
 
 
 
-export class HomePage {
+export class LoginPage {
     readonly page: Page;
     readonly url: string;
     readonly pageTitle:string;
-    readonly cardAlerts:Locator;
+
 
     constructor(page: Page) {
       this.page = page;
       this.url = "/";
     //   this.url = process.env.BASE_URL + "/";
       this.pageTitle = 'DEMOQA'
-      this.cardAlerts = page.getByRole('heading', { name: 'Alerts, Frame & Windows' })
 
     }
 
