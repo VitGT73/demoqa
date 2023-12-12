@@ -1,16 +1,20 @@
 import { test as base } from "@playwright/test";
 // import { LoginPage } from "../pages/login.page";
 import HomePage from "../pages/home.page";
-import AlertPage from "../pages/alerts.page";
+import AlertsPage from "../pages/alerts.page";
 import BooksPage from "../pages/books.page";
 import ElementsPage from "../pages/elements.page";
+import FormsPage from "../pages/forms.page";
+import WidgetsPage from "../pages/widgets.page";
 // import { RegisterPage } from "../pages/register.page";
 
 type DemoqaPages = {
   homePage: HomePage;
-  alertPage: AlertPage;
+  alertsPage: AlertsPage;
   booksPage: BooksPage;
   elementsPage: ElementsPage;
+  formsPage: FormsPage;
+  widgetsPage: WidgetsPage;
 };
 
 export const test = base.extend<DemoqaPages>({
@@ -20,9 +24,9 @@ export const test = base.extend<DemoqaPages>({
     await use(homePage);
   },
 
-  alertPage: async ({ page }, use) => {
-    const alertPage = new AlertPage(page);
-    await use(alertPage);
+  alertsPage: async ({ page }, use) => {
+    const alertsPage = new AlertsPage(page);
+    await use(alertsPage);
   },
 
   booksPage: async ({ page }, use) => {
@@ -35,6 +39,15 @@ export const test = base.extend<DemoqaPages>({
     await use(booksPage);
   },
 
+  formsPage: async ({ page }, use) => {
+    const formsPage = new FormsPage(page);
+    await use(formsPage);
+  },
+
+  widgetsPage: async ({ page }, use) => {
+    const booksPage = new WidgetsPage(page);
+    await use(booksPage);
+  },
 
 });
 

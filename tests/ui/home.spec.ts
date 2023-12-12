@@ -9,10 +9,10 @@ test.describe('@smock Demoqa tests', () => {
     await homePage.assertPageTitle();
   });
 
-  test('load page Alert', async ({ page, homePage, alertPage }) => {
+  test('load page Alerts', async ({ page, homePage, alertsPage }) => {
     await homePage.load();
     await homePage.cardAlerts.click();
-    await alertPage.assertPageHeader();
+    await alertsPage.assertPageHeader();
   });
 
   test('load page Books', async ({ page, homePage, booksPage }) => {
@@ -25,5 +25,17 @@ test.describe('@smock Demoqa tests', () => {
     await homePage.load();
     await homePage.cardElements.click();
     await elementsPage.assertPageHeader();
+  });
+
+  test('load page Forms', async ({ page, homePage, formsPage }) => {
+    await homePage.load();
+    await homePage.cardElements.click();
+    await formsPage.assertPageHeader();
+  });
+
+  test('load page Widgets', async ({ page, homePage, widgetsPage }) => {
+    await homePage.load();
+    await homePage.cardElements.click();
+    await widgetsPage.assertPageHeader();
   });
 });

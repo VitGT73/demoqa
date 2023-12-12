@@ -1,6 +1,6 @@
 import { type Page, type Locator , expect } from '@playwright/test';
 
-export class AlertPage {
+export class AlertsPage {
     readonly page: Page;
     readonly url: string;
     readonly headerText:string;
@@ -25,4 +25,4 @@ export class AlertPage {
 
   }
 
-  export default AlertPage
+  export default AlertsPage
