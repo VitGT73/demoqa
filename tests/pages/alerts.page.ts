@@ -18,7 +18,7 @@ export class AlertPage {
       await this.page.goto(this.url,{waitUntil: 'domcontentloaded'});
     }
 
-    async assertPageTitle() {
+    async assertPageHeader() {
       await expect(this.header).toHaveText(this.headerText);
     }
 

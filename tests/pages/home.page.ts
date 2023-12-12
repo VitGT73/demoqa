@@ -7,6 +7,7 @@ export class HomePage {
     readonly url: string;
     readonly pageTitle:string;
     readonly cardAlerts:Locator;
+    readonly cardBooks:Locator;
 
     constructor(page: Page) {
       this.page = page;
@@ -14,6 +15,7 @@ export class HomePage {
     //   this.url = process.env.BASE_URL + "/";
       this.pageTitle = 'DEMOQA'
       this.cardAlerts = page.getByRole('heading', { name: 'Alerts, Frame & Windows' })
+      this.cardBooks = page.getByRole('heading', { name: 'Book Store Application' })
 
     }
 
