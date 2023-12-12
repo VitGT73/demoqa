@@ -6,15 +6,23 @@ export class HomePage {
     readonly page: Page;
     readonly url: string;
     readonly pageTitle:string;
+    readonly cardElements:Locator;
+    readonly cardForms: Locator;
     readonly cardAlerts:Locator;
+    readonly cardWidget: Locator;
+    readonly cardInteractions: Locator;
     readonly cardBooks:Locator;
 
-    constructor(page: Page) {
+    constructor(page:  Page) {
       this.page = page;
       this.url = "/";
     //   this.url = process.env.BASE_URL + "/";
       this.pageTitle = 'DEMOQA'
+      this.cardElements = page.getByRole('heading', { name: 'Elements' })
+      this.cardForms = page.getByRole('heading', { name: 'Forms' })
       this.cardAlerts = page.getByRole('heading', { name: 'Alerts, Frame & Windows' })
+      this.cardWidget = page.getByRole('heading', { name: 'Widgets' })
+      this.cardInteractions = page.getByRole('heading', { name: 'Interactions' })
       this.cardBooks = page.getByRole('heading', { name: 'Book Store Application' })
 
     }

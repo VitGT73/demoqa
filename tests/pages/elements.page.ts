@@ -1,30 +1,28 @@
 import { type Page, type Locator , expect } from '@playwright/test';
 
-
-
-export class LoginPage {
+export class ElementsPage {
     readonly page: Page;
     readonly url: string;
-    readonly pageTitle:string;
-
+    readonly headerText:string;
+    readonly header :Locator;
 
     constructor(page: Page) {
       this.page = page;
-      this.url = "/elements";
+      this.url = "/alertsWindows";
     //   this.url = process.env.BASE_URL + "/";
-      this.pageTitle = 'Elements'
-
+      this.headerText = 'Elements';
+      this.header = page.getByText('Elements').first()
     }
 
     async load(){
       await this.page.goto(this.url,{waitUntil: 'domcontentloaded'});
     }
 
-    async assertPageTitle() {
-      await expect(this.page).toHaveTitle(this.pageTitle);
+    async assertPageHeader() {
+      await expect(this.header).toHaveText(this.headerText);
     }
 
 
   }
 
-  export default HomePage
+  export default ElementsPage

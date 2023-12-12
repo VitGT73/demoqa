@@ -3,12 +3,14 @@ import { test as base } from "@playwright/test";
 import HomePage from "../pages/home.page";
 import AlertPage from "../pages/alerts.page";
 import BooksPage from "../pages/books.page";
+import ElementsPage from "../pages/elements.page";
 // import { RegisterPage } from "../pages/register.page";
 
 type DemoqaPages = {
   homePage: HomePage;
   alertPage: AlertPage;
   booksPage: BooksPage;
+  elementsPage: ElementsPage;
 };
 
 export const test = base.extend<DemoqaPages>({
@@ -25,6 +27,11 @@ export const test = base.extend<DemoqaPages>({
 
   booksPage: async ({ page }, use) => {
     const booksPage = new BooksPage(page);
+    await use(booksPage);
+  },
+
+  elementsPage: async ({ page }, use) => {
+    const booksPage = new ElementsPage(page);
     await use(booksPage);
   },
 
