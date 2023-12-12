@@ -8,7 +8,7 @@ export class WidgetsPage {
 
     constructor(page: Page) {
       this.page = page;
-      this.url = "/alertsWindows";
+      this.url = "/widgets";
     //   this.url = process.env.BASE_URL + "/";
       this.headerText = 'Widgets';
       this.header = page.getByText('Widgets').first()
@@ -22,6 +22,9 @@ export class WidgetsPage {
       await expect(this.header).toHaveText(this.headerText);
     }
 
+    async assertPageUrl() {
+      await expect(this.page).toHaveURL(this.url);
+    }
 
   }
 

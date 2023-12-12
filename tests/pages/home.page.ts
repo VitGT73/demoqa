@@ -9,7 +9,7 @@ export class HomePage {
     readonly cardElements:Locator;
     readonly cardForms: Locator;
     readonly cardAlerts:Locator;
-    readonly cardWidget: Locator;
+    readonly cardWidgets: Locator;
     readonly cardInteractions: Locator;
     readonly cardBooks:Locator;
 
@@ -21,7 +21,7 @@ export class HomePage {
       this.cardElements = page.getByRole('heading', { name: 'Elements' })
       this.cardForms = page.getByRole('heading', { name: 'Forms' })
       this.cardAlerts = page.getByRole('heading', { name: 'Alerts, Frame & Windows' })
-      this.cardWidget = page.getByRole('heading', { name: 'Widgets' })
+      this.cardWidgets = page.getByRole('heading', { name: 'Widgets' })
       this.cardInteractions = page.getByRole('heading', { name: 'Interactions' })
       this.cardBooks = page.getByRole('heading', { name: 'Book Store Application' })
 
@@ -35,7 +35,9 @@ export class HomePage {
       await expect(this.page).toHaveTitle(this.pageTitle);
     }
 
-
+    async assertPageUrl() {
+      await expect(this.page).toHaveURL(this.url);
+    }
   }
 
   export default HomePage

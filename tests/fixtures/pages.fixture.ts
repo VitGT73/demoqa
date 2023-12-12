@@ -6,6 +6,7 @@ import BooksPage from "../pages/books.page";
 import ElementsPage from "../pages/elements.page";
 import FormsPage from "../pages/forms.page";
 import WidgetsPage from "../pages/widgets.page";
+import InteractionsPage from "../pages/interaction.page";
 // import { RegisterPage } from "../pages/register.page";
 
 type DemoqaPages = {
@@ -15,12 +16,14 @@ type DemoqaPages = {
   elementsPage: ElementsPage;
   formsPage: FormsPage;
   widgetsPage: WidgetsPage;
+  interactionsPage: InteractionsPage
 };
 
 export const test = base.extend<DemoqaPages>({
 
   homePage: async ({ page }, use) => {
     const homePage = new HomePage(page);
+    await homePage.load();
     await use(homePage);
   },
 
@@ -47,6 +50,11 @@ export const test = base.extend<DemoqaPages>({
   widgetsPage: async ({ page }, use) => {
     const booksPage = new WidgetsPage(page);
     await use(booksPage);
+  },
+
+  interactionsPage: async ({ page }, use) => {
+    const interactionsPage = new InteractionsPage(page);
+    await use(interactionsPage);
   },
 
 });

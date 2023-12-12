@@ -8,7 +8,7 @@ export class FormsPage {
 
     constructor(page: Page) {
       this.page = page;
-      this.url = "/alertsWindows";
+      this.url = "/forms";
     //   this.url = process.env.BASE_URL + "/";
       this.headerText = 'Forms';
       this.header = page.getByText('Forms').first()
@@ -22,6 +22,9 @@ export class FormsPage {
       await expect(this.header).toHaveText(this.headerText);
     }
 
+    async assertPageUrl() {
+      await expect(this.page).toHaveURL(this.url);
+    }
 
   }
 

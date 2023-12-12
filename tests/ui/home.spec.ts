@@ -2,40 +2,48 @@
 import { test , expect } from '../fixtures/pages.fixture';
 
 test.describe('@smock Demoqa tests', () => {
+
+  // test.beforeEach(async ({ page, homePage }) => {
+  //   await homePage.load();
+  // });
+
   test('Demoqa has title', async ({ page, homePage }) => {
-    await homePage.load();
 
     // Expect a title "to contain" a substring.
     await homePage.assertPageTitle();
   });
 
   test('load page Alerts', async ({ page, homePage, alertsPage }) => {
-    await homePage.load();
+
     await homePage.cardAlerts.click();
-    await alertsPage.assertPageHeader();
+    await alertsPage.assertPageUrl();
   });
 
   test('load page Books', async ({ page, homePage, booksPage }) => {
-    await homePage.load();
+
     await homePage.cardBooks.click();
-    await booksPage.assertPageHeader();
+    await booksPage.assertPageUrl();
   });
 
   test('load page Elements', async ({ page, homePage, elementsPage }) => {
-    await homePage.load();
+
     await homePage.cardElements.click();
-    await elementsPage.assertPageHeader();
+    await elementsPage.assertPageUrl();
   });
 
   test('load page Forms', async ({ page, homePage, formsPage }) => {
-    await homePage.load();
-    await homePage.cardElements.click();
-    await formsPage.assertPageHeader();
+
+    await homePage.cardForms.click();
+    await formsPage.assertPageUrl();
   });
 
   test('load page Widgets', async ({ page, homePage, widgetsPage }) => {
-    await homePage.load();
-    await homePage.cardElements.click();
-    await widgetsPage.assertPageHeader();
+    await homePage.cardWidgets.click();
+    await widgetsPage.assertPageUrl();
+  });
+
+  test('load page Interactions', async ({ page, homePage, interactionsPage }) => {
+    await homePage.cardInteractions.click();
+    await interactionsPage.assertPageUrl();
   });
 });

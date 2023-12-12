@@ -25,6 +25,9 @@ export class BooksPage {
       await expect(this.header).toHaveText(this.headerText);
     }
 
+    async assertPageUrl() {
+      await expect(this.page).toHaveURL(this.url);
+    }
 
   }
 
