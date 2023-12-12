@@ -1,0 +1,25 @@
+{
+  "name": "demoqa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test tests/ --project=chromium",
+    "test:all": "npx playwright test tests/",
+    "test:cromium": "npx playwright test tests/ui/ --project=chromium",
+    "test:firefox": "npx playwright test tests/ui/ --project=firefox",
+    "test:webkit": "npx playwright test tests/ui/ --project=webkit",
+    "test:api": "npx playwright test tests/api --project=api",
+    "test:smoke": "npx playwright test tests/ --grep @smoke --project=chromium",
+    "test:non-smoke": "npx playwright test tests/ --grep-invert @smoke --project=chromium",
+    "test:me": "npx playwright test me.spec.ts --project=chromium",
+    "test:one": "npx playwright test login.spec.ts --headed --project=chromium"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.40.1",
+    "@types/node": "^20.10.4"
+  }
+}
