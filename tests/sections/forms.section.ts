@@ -1,31 +1,40 @@
-import { type Page, type Locator , expect } from '@playwright/test';
+import { type Page, type Locator, expect } from "@playwright/test";
 
-export class FormsPage {
-    readonly page: Page;
-    readonly url: string;
-    readonly headerText:string;
-    readonly header :Locator;
+export class FormsSection {
+  readonly page: Page;
+  readonly rootElement: Locator;
 
-    constructor(page: Page) {
-      this.page = page;
-      this.url = "/forms";
-    //   this.url = process.env.BASE_URL + "/";
-      this.headerText = 'Forms';
-      this.header = page.getByText('Forms').first()
-    }
-
-    async load(){
-      await this.page.goto(this.url,{waitUntil: 'domcontentloaded'});
-    }
-
-    async assertPageHeader() {
-      await expect(this.header).toHaveText(this.headerText);
-    }
-
-    async assertPageUrl() {
-      await expect(this.page).toHaveURL(this.url);
-    }
+  constructor(page: Page) {
+    this.page = page;
+    this.rootElement = page.locator('span').filter({ hasText: 'Forms' }).locator('div').first()
+    // this.rootElement = page.locator('span').filter({ hasText: 'Elements' }).locator('div').first()
 
   }
 
-  export default FormsPage
+
+  async isOpen(){
+    // await expect(this.textBoxElement).toBeVisible();
+    // await expect(this.checkBoxElement).toBeVisible();
+    // await expect(this.radioButtonElement).toBeVisible();
+    // await expect(this.webTablesElement).toBeVisible();
+    // await expect(this.buttonsElement).toBeVisible();
+    // await expect(this.linksElement).toBeVisible();
+    // await expect(this.uploadAddDownloadElement).toBeVisible();
+    // await expect(this.dynamicPropertiesElement).toBeVisible();
+  }
+
+  async isClose() {
+    // await expect(this.textBoxElement).toBeHidden();
+    // await expect(this.checkBoxElement).toBeHidden();
+    // await expect(this.radioButtonElement).toBeHidden();
+    // await expect(this.webTablesElement).toBeHidden();
+    // await expect(this.buttonsElement).toBeHidden();
+    // await expect(this.linksElement).toBeHidden();
+    // await expect(this.uploadAddDownloadElement).toBeHidden();
+    // await expect(this.dynamicPropertiesElement).toBeHidden();
+  }
+}
+
+
+
+export default FormsSection

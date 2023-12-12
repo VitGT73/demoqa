@@ -1,31 +1,40 @@
-import { type Page, type Locator , expect } from '@playwright/test';
+import { type Page, type Locator, expect } from "@playwright/test";
 
-export class WidgetsPage {
-    readonly page: Page;
-    readonly url: string;
-    readonly headerText:string;
-    readonly header :Locator;
+export class WidgetSection {
+  readonly page: Page;
+  readonly rootElement: Locator;
 
-    constructor(page: Page) {
-      this.page = page;
-      this.url = "/widgets";
-    //   this.url = process.env.BASE_URL + "/";
-      this.headerText = 'Widgets';
-      this.header = page.getByText('Widgets').first()
-    }
-
-    async load(){
-      await this.page.goto(this.url,{waitUntil: 'domcontentloaded'});
-    }
-
-    async assertPageHeader() {
-      await expect(this.header).toHaveText(this.headerText);
-    }
-
-    async assertPageUrl() {
-      await expect(this.page).toHaveURL(this.url);
-    }
+  constructor(page: Page) {
+    this.page = page;
+    this.rootElement = page.locator('span').filter({ hasText: 'Widgets' }).locator('div').first()
+    // this.rootElement = page.locator('span').filter({ hasText: 'Elements' }).locator('div').first()
 
   }
 
-  export default WidgetsPage
+
+  async isOpen(){
+    // await expect(this.textBoxElement).toBeVisible();
+    // await expect(this.checkBoxElement).toBeVisible();
+    // await expect(this.radioButtonElement).toBeVisible();
+    // await expect(this.webTablesElement).toBeVisible();
+    // await expect(this.buttonsElement).toBeVisible();
+    // await expect(this.linksElement).toBeVisible();
+    // await expect(this.uploadAddDownloadElement).toBeVisible();
+    // await expect(this.dynamicPropertiesElement).toBeVisible();
+  }
+
+  async isClose() {
+    // await expect(this.textBoxElement).toBeHidden();
+    // await expect(this.checkBoxElement).toBeHidden();
+    // await expect(this.radioButtonElement).toBeHidden();
+    // await expect(this.webTablesElement).toBeHidden();
+    // await expect(this.buttonsElement).toBeHidden();
+    // await expect(this.linksElement).toBeHidden();
+    // await expect(this.uploadAddDownloadElement).toBeHidden();
+    // await expect(this.dynamicPropertiesElement).toBeHidden();
+  }
+}
+
+
+
+export default WidgetSection

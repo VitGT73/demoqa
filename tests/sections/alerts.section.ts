@@ -1,30 +1,50 @@
-import { type Page, type Locator , expect } from '@playwright/test';
+import { type Page, type Locator, expect } from "@playwright/test";
 
 export class AlertsSection {
-    readonly page: Page;
-    readonly rootLocator: Locator;
+  readonly page: Page;
+  readonly rootElement: Locator;
+  readonly browserWindowsElement :Locator;
+  readonly alertsElement :Locator;
+  readonly framesElement:Locator;
+  readonly nestedFramesElements: Locator;
+  readonly modalDialogElements: Locator;
 
-    constructor(page: Page) {
-      this.page = page;
-      this.rootLocator = page.locator('span').filter({ hasText: 'Elements' }).locator('div').first()
-
-    }
-
-    async Open() {
-      await expect(this.page).toHaveURL(this.url);
-    }
-
-    async Close() {
-      await expect(this.page).toHaveURL(this.url);
-    }
-    async isOpen(){
-      await this.page.goto(this.url,{waitUntil: 'domcontentloaded'});
-    }
-
-    async isClose() {
-      await expect(this.header).toHaveText(this.headerText);
-    }
+  constructor(page: Page) {
+    this.page = page;
+    this.rootElement =  page.getByText('Alerts, Frame & Windows')
+    this.browserWindowsElement =page.locator('li').filter({ hasText: 'Browser Windows' });
+    this.alertsElement =page.locator('li').filter({ hasText: 'Alerts' });
+    this.framesElement =page.locator('li').filter({ hasText: /^Frames$/ });
+    this.nestedFramesElements =page.locator('li').filter({ hasText: 'Nested Frames' });
+    this.modalDialogElements =page.locator('li').filter({ hasText: 'Modal Dialogs' });
+    // this.rootElement = page.locator('span').filter({ hasText: 'Elements' }).locator('div').first()
 
   }
 
-  export default AlertsSection
+
+  async isOpen(){
+    // await expect(this.textBoxElement).toBeVisible();
+    // await expect(this.checkBoxElement).toBeVisible();
+    // await expect(this.radioButtonElement).toBeVisible();
+    // await expect(this.webTablesElement).toBeVisible();
+    // await expect(this.buttonsElement).toBeVisible();
+    // await expect(this.linksElement).toBeVisible();
+    // await expect(this.uploadAddDownloadElement).toBeVisible();
+    // await expect(this.dynamicPropertiesElement).toBeVisible();
+  }
+
+  async isClose() {
+    // await expect(this.textBoxElement).toBeHidden();
+    // await expect(this.checkBoxElement).toBeHidden();
+    // await expect(this.radioButtonElement).toBeHidden();
+    // await expect(this.webTablesElement).toBeHidden();
+    // await expect(this.buttonsElement).toBeHidden();
+    // await expect(this.linksElement).toBeHidden();
+    // await expect(this.uploadAddDownloadElement).toBeHidden();
+    // await expect(this.dynamicPropertiesElement).toBeHidden();
+  }
+}
+
+
+
+export default AlertsSection
