@@ -1,10 +1,8 @@
 import { type Page, type Locator, expect } from "@playwright/test";
 
-export class ElementsPage {
+export class ElementsSection {
   readonly page: Page;
-  readonly url: string;
-  readonly headerText: string;
-  readonly header: Locator;
+  readonly rootElement: Locator;
   readonly textBoxElement: Locator;
   readonly checkBoxElement: Locator;
   readonly radioButtonElement: Locator;
@@ -17,10 +15,7 @@ export class ElementsPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.url = "/elements";
-    //   this.url = process.env.BASE_URL + "/";
-    this.headerText = "Elements";
-    this.header = page.getByText("Elements").first();
+    this.rootElement = page.locator('span').filter({ hasText: 'Elements' }).locator('div').first()
     this.textBoxElement = page.locator('li').filter({ hasText: 'Text Box' })
     this.checkBoxElement=  page.locator('li').filter({ hasText: 'Check Box' })
     this.radioButtonElement =page.locator('li').filter({ hasText: 'Radio Button' })
@@ -32,17 +27,28 @@ export class ElementsPage {
     this.dynamicPropertiesElement = page.locator('li').filter({ hasText: 'Dynamic Properties' })
   }
 
-  async load() {
-    await this.page.goto(this.url, { waitUntil: "domcontentloaded" });
+
+  async isOpen(){
+    await expect(this.textBoxElement).toBeVisible();
+    await expect(this.checkBoxElement).toBeVisible();
+    await expect(this.radioButtonElement).toBeVisible();
+    await expect(this.webTablesElement).toBeVisible();
+    await expect(this.buttonsElement).toBeVisible();
+    await expect(this.linksElement).toBeVisible();
+    await expect(this.uploadAddDownloadElement).toBeVisible();
+    await expect(this.dynamicPropertiesElement).toBeVisible();
   }
 
-  async assertPageHeader() {
-    await expect(this.header).toHaveText(this.headerText);
-  }
-
-  async assertPageUrl() {
-    await expect(this.page).toHaveURL(this.url);
+  async isClose() {
+    await expect(this.textBoxElement).toBeHidden();
+    await expect(this.checkBoxElement).toBeHidden();
+    await expect(this.radioButtonElement).toBeHidden();
+    await expect(this.webTablesElement).toBeHidden();
+    await expect(this.buttonsElement).toBeHidden();
+    await expect(this.linksElement).toBeHidden();
+    await expect(this.uploadAddDownloadElement).toBeHidden();
+    await expect(this.dynamicPropertiesElement).toBeHidden();
   }
 }
 
-export default ElementsPage;
+export default ElementsSection;
