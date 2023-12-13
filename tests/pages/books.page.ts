@@ -1,5 +1,5 @@
 import { type Page, type Locator , expect } from '@playwright/test';
-
+import { AccordionSection } from "../sections/accordion.section";
 
 
 export class BooksPage {
@@ -7,11 +7,12 @@ export class BooksPage {
     readonly url: string;
     readonly headerText:string;
     readonly header :Locator;
-
+    readonly accordionSection: AccordionSection;
 
     constructor(page: Page) {
       this.page = page;
       this.url = "/books";
+      this.accordionSection = new AccordionSection(page);
     //   this.url = process.env.BASE_URL + "/";
       this.headerText = 'Book Store';
       this.header = page.getByText('Book Store').first()

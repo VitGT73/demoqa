@@ -1,10 +1,12 @@
 import { type Page, type Locator, expect } from "@playwright/test";
+import { AccordionSection } from "../sections/accordion.section";
 
 export class ElementsPage {
   readonly page: Page;
   readonly url: string;
   readonly headerText: string;
   readonly header: Locator;
+  readonly accordionSection: AccordionSection;
   readonly textBoxElement: Locator;
   readonly checkBoxElement: Locator;
   readonly radioButtonElement: Locator;
@@ -19,8 +21,10 @@ export class ElementsPage {
     this.page = page;
     this.url = "/elements";
     //   this.url = process.env.BASE_URL + "/";
+    this.accordionSection = new AccordionSection(page);
     this.headerText = "Elements";
     this.header = page.getByText("Elements").first();
+    this.accordionSection = new AccordionSection(page);
     this.textBoxElement = page.locator('li').filter({ hasText: 'Text Box' })
     this.checkBoxElement=  page.locator('li').filter({ hasText: 'Check Box' })
     this.radioButtonElement =page.locator('li').filter({ hasText: 'Radio Button' })
