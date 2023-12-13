@@ -18,6 +18,12 @@ export class AccordionSection {
 
   constructor(page: Page) {
     this.page = page;
+    this.alertsSection=new AlertsSection(page);
+    this.booksSection=new BooksSection(page);
+    this.elementsSection=new ElementsSection(page);
+    this.formsSection=new FormsSection(page);
+    this.interactionsSection=new InteractionsSection(page);
+    this.widgetSection=new WidgetSection(page);
   }
 
 

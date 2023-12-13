@@ -11,37 +11,33 @@ export class AlertsSection {
 
   constructor(page: Page) {
     this.page = page;
-    this.rootElement =  page.getByText('Alerts, Frame & Windows')
+   // this.rootElement =  page.getByText('Alerts, Frame & Windows')
+    this.rootElement = page.locator('span').filter({ hasText: 'Alerts, Frame & Windows' }).locator('div').first()
     this.browserWindowsElement =page.locator('li').filter({ hasText: 'Browser Windows' });
     this.alertsElement =page.locator('li').filter({ hasText: 'Alerts' });
     this.framesElement =page.locator('li').filter({ hasText: /^Frames$/ });
     this.nestedFramesElements =page.locator('li').filter({ hasText: 'Nested Frames' });
     this.modalDialogElements =page.locator('li').filter({ hasText: 'Modal Dialogs' });
-    // this.rootElement = page.locator('span').filter({ hasText: 'Elements' }).locator('div').first()
+
 
   }
 
 
   async isOpen(){
-    // await expect(this.textBoxElement).toBeVisible();
-    // await expect(this.checkBoxElement).toBeVisible();
-    // await expect(this.radioButtonElement).toBeVisible();
-    // await expect(this.webTablesElement).toBeVisible();
-    // await expect(this.buttonsElement).toBeVisible();
-    // await expect(this.linksElement).toBeVisible();
-    // await expect(this.uploadAddDownloadElement).toBeVisible();
-    // await expect(this.dynamicPropertiesElement).toBeVisible();
+    await expect(this.browserWindowsElement).toBeVisible();
+    await expect(this.alertsElement).toBeVisible();
+    await expect(this.framesElement).toBeVisible();
+    await expect(this.nestedFramesElements).toBeVisible();
+    await expect(this.modalDialogElements).toBeVisible();
   }
 
   async isClose() {
-    // await expect(this.textBoxElement).toBeHidden();
-    // await expect(this.checkBoxElement).toBeHidden();
-    // await expect(this.radioButtonElement).toBeHidden();
-    // await expect(this.webTablesElement).toBeHidden();
-    // await expect(this.buttonsElement).toBeHidden();
-    // await expect(this.linksElement).toBeHidden();
-    // await expect(this.uploadAddDownloadElement).toBeHidden();
-    // await expect(this.dynamicPropertiesElement).toBeHidden();
+    await expect(this.browserWindowsElement).toBeHidden();
+    await expect(this.alertsElement).toBeHidden();
+    await expect(this.framesElement).toBeHidden();
+    await expect(this.nestedFramesElements).toBeHidden();
+    await expect(this.modalDialogElements).toBeHidden();
+
   }
 }
 

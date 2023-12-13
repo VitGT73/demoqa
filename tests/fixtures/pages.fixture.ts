@@ -29,31 +29,37 @@ export const test = base.extend<DemoqaPages>({
 
   alertsPage: async ({ page }, use) => {
     const alertsPage = new AlertsPage(page);
+    await alertsPage.load();
     await use(alertsPage);
   },
 
   booksPage: async ({ page }, use) => {
     const booksPage = new BooksPage(page);
+    await booksPage.load();
     await use(booksPage);
   },
 
   elementsPage: async ({ page }, use) => {
-    const booksPage = new ElementsPage(page);
-    await use(booksPage);
+    const elementsPage = new ElementsPage(page);
+    await elementsPage.load();
+    await use(elementsPage);
   },
 
   formsPage: async ({ page }, use) => {
     const formsPage = new FormsPage(page);
+    await formsPage.load();
     await use(formsPage);
   },
 
   widgetsPage: async ({ page }, use) => {
     const booksPage = new WidgetsPage(page);
+    await booksPage.load();
     await use(booksPage);
   },
 
   interactionsPage: async ({ page }, use) => {
     const interactionsPage = new InteractionsPage(page);
+    await interactionsPage.load();
     await use(interactionsPage);
   },
 
