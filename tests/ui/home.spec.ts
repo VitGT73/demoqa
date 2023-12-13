@@ -1,7 +1,7 @@
 // import { test, expect } from '@playwright/test';
 import { test, expect } from "../fixtures/pages.fixture";
 
-test.describe("@smock Demoqa tests", () => {
+test.describe("@smoke Demoqa tests", () => {
   // test.beforeEach(async ({ page, homePage }) => {
   //   await homePage.load();
   // });

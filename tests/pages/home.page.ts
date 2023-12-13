@@ -6,12 +6,6 @@ import { FormsPage } from "./forms.page";
 import { InteractionsPage } from "./interaction.page";
 import { WidgetsPage } from "./widgets.page";
 
-// import {} from "../sections/alerts.section";
-// import {} from "../sections/books.section";
-// import {} from "../sections/elements.section";
-// import {} from "../sections/forms.section";
-// import {} from "../sections/interaction.section";
-// import {} from "../sections/widgets.section";
 
 export class HomePage {
   readonly page: Page;

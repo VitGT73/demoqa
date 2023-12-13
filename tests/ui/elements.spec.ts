@@ -12,12 +12,12 @@ test.describe("Elements section tests", () => {
   });
 
   test("'Elements' accordion section opens", async ({ elementsPage }) => {
-    await elementsPage.accordionSection.alertsSection.isOpen();
+    await elementsPage.accordionSection.elementsSection.isOpen();
     });
 
   test("'Elements' accordion section closes", async ({ elementsPage }) => {
-    await elementsPage.accordionSection.alertsSection.rootElement.click();
-    await elementsPage.accordionSection.alertsSection.isClose();
+    await elementsPage.accordionSection.elementsSection.rootElement.click();
+    await elementsPage.accordionSection.elementsSection.isClose();
   });
 
 
