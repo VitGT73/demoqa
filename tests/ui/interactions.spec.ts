@@ -16,7 +16,7 @@ test.describe("Interactions section tests", () => {
     });
 
   test("'Interactions' accordion section closes", async ({ interactionsPage }) => {
-    await interactionsPage.accordionSection.interactionsSection.rootElement.click();
+    await interactionsPage.accordionSection.interactionsSection.rootItem.click();
     await interactionsPage.accordionSection.interactionsSection.isClose();
   });
 

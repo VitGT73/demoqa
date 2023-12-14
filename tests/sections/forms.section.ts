@@ -2,24 +2,23 @@ import { type Page, type Locator, expect } from "@playwright/test";
 
 export class FormsSection {
   readonly page: Page;
-  readonly rootElement: Locator;
-  readonly practiceFormElement: Locator;
+  readonly rootItem: Locator;
+  readonly practiceFormItem: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.rootElement = page.locator('span').filter({ hasText: 'Forms' }).locator('div').first()
-    // this.rootElement = page.locator('span').filter({ hasText: 'Elements' }).locator('div').first()
-    this.practiceFormElement = page.getByRole('listitem').getByText('Practice Form');
+    this.rootItem = page.locator('span').filter({ hasText: 'Forms' }).locator('div').first()
+    this.practiceFormItem = page.getByRole('listitem').getByText('Practice Form');
   }
 
 
   async isOpen(){
-    await expect(this.practiceFormElement).toBeVisible();
+    await expect(this.practiceFormItem).toBeVisible();
 
   }
 
   async isClose() {
-    await expect(this.practiceFormElement).toBeHidden();
+    await expect(this.practiceFormItem).toBeHidden();
 
   }
 }

@@ -2,62 +2,59 @@ import { type Page, type Locator, expect } from "@playwright/test";
 
 export class WidgetSection {
   readonly page: Page;
-  readonly rootElement: Locator;
-  readonly accordionElement: Locator;
-  readonly autoCompleteElement: Locator;
-  readonly dataPickerElement: Locator;
-  readonly sliderElement: Locator;
-  readonly progressBarElement: Locator;
-  readonly tabsElement: Locator;
-  readonly toolTipsElement: Locator;
-  readonly menuElements: Locator;
-  readonly selectMenuElement: Locator;
+  readonly rootItem: Locator;
+  readonly accordionItem: Locator;
+  readonly autoCompleteItem: Locator;
+  readonly dataPickerItem: Locator;
+  readonly sliderItem: Locator;
+  readonly progressBarItem: Locator;
+  readonly tabsItem: Locator;
+  readonly toolTipsItem: Locator;
+  readonly menuItem: Locator;
+  readonly selectMenuItem: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.rootElement = page
-      .locator("span")
-      .filter({ hasText: "Widgets" })
-      .locator("div")
-      .first();
-    // this.rootElement = page.locator('span').filter({ hasText: 'Elements' }).locator('div').first()
+    this.rootItem = page.locator("span").filter({ hasText: "Widgets" }).locator("div").first();
 
-    this.accordionElement = page.locator("li").filter({ hasText: "Accordian" });
-    // this.accordionElement = page.getByRole("listitem").getByText("Accordian");
-    this.autoCompleteElement = page.locator("li").filter({ hasText: "Auto Complete" });
-    this.dataPickerElement = page.locator("li").filter({ hasText: "Date Picker" });
-    this.sliderElement = page.locator("li").filter({ hasText: "Slider" });
-    this.progressBarElement = page.locator("li").filter({ hasText: "Progress Bar" });
-    this.tabsElement = page.locator("li").filter({ hasText: "Tabs" });
-    this.toolTipsElement = page.locator("li").filter({ hasText: "Tool Tips" });
-    // this.menuElements = page.locator("li").filter({ hasText: "Menu" });
+
+    this.accordionItem = page.locator("li").filter({ hasText: "Accordian" });
+    // this.accordionItem = page.getByRole("listitem").getByText("Accordian");
+    this.autoCompleteItem = page.locator("li").filter({ hasText: "Auto Complete" });
+    this.dataPickerItem = page.locator("li").filter({ hasText: "Date Picker" });
+    this.sliderItem = page.locator("li").filter({ hasText: "Slider" });
+    this.progressBarItem = page.locator("li").filter({ hasText: "Progress Bar" });
+    this.tabsItem = page.locator("li").filter({ hasText: "Tabs" });
+    this.toolTipsItem = page.locator("li").filter({ hasText: "Tool Tips" });
+
+    this.menuItem = page.getByRole("listitem").getByText("Menu", { exact: true });
+    // this.menuItem = page.locator("li").filter({ hasText: "Menu" });
     // Эта строка не работает, потому что слово Menu есть еще в "Select Menu"
-    this.menuElements = page.getByRole("listitem").getByText("Menu",{exact: true});
-    this.selectMenuElement = page.locator("li").filter({ hasText: "Select Menu" });
+    this.selectMenuItem = page.locator("li").filter({ hasText: "Select Menu" });
   }
 
   async isOpen() {
-    await expect(this.accordionElement).toBeVisible();
-    await expect(this.autoCompleteElement).toBeVisible();
-    await expect(this.dataPickerElement).toBeVisible();
-    await expect(this.sliderElement).toBeVisible();
-    await expect(this.progressBarElement).toBeVisible();
-    await expect(this.tabsElement).toBeVisible();
-    await expect(this.toolTipsElement).toBeVisible();
-    await expect(this.menuElements).toBeVisible();
-    await expect(this.selectMenuElement).toBeVisible();
+    await expect(this.accordionItem).toBeVisible();
+    await expect(this.autoCompleteItem).toBeVisible();
+    await expect(this.dataPickerItem).toBeVisible();
+    await expect(this.sliderItem).toBeVisible();
+    await expect(this.progressBarItem).toBeVisible();
+    await expect(this.tabsItem).toBeVisible();
+    await expect(this.toolTipsItem).toBeVisible();
+    await expect(this.menuItem).toBeVisible();
+    await expect(this.selectMenuItem).toBeVisible();
   }
 
   async isClose() {
-    await expect(this.accordionElement).toBeHidden();
-    await expect(this.autoCompleteElement).toBeHidden();
-    await expect(this.dataPickerElement).toBeHidden();
-    await expect(this.sliderElement).toBeHidden();
-    await expect(this.progressBarElement).toBeHidden();
-    await expect(this.tabsElement).toBeHidden();
-    await expect(this.toolTipsElement).toBeHidden();
-    await expect(this.menuElements).toBeHidden();
-    await expect(this.selectMenuElement).toBeHidden();
+    await expect(this.accordionItem).toBeHidden();
+    await expect(this.autoCompleteItem).toBeHidden();
+    await expect(this.dataPickerItem).toBeHidden();
+    await expect(this.sliderItem).toBeHidden();
+    await expect(this.progressBarItem).toBeHidden();
+    await expect(this.tabsItem).toBeHidden();
+    await expect(this.toolTipsItem).toBeHidden();
+    await expect(this.menuItem).toBeHidden();
+    await expect(this.selectMenuItem).toBeHidden();
   }
 }
 

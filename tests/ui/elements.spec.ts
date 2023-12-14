@@ -16,7 +16,7 @@ test.describe("Elements section tests", () => {
     });
 
   test("'Elements' accordion section closes", async ({ elementsPage }) => {
-    await elementsPage.accordionSection.elementsSection.rootElement.click();
+    await elementsPage.accordionSection.elementsSection.rootItem.click();
     await elementsPage.accordionSection.elementsSection.isClose();
   });
 

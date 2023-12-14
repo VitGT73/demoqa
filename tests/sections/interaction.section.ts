@@ -2,38 +2,37 @@ import { type Page, type Locator, expect } from "@playwright/test";
 
 export class InteractionsSection {
   readonly page: Page;
-  readonly rootElement: Locator;
-  readonly sortableElement: Locator;
-  readonly selectableElement: Locator;
-  readonly resizableElement: Locator;
-  readonly droppableElement: Locator;
-  readonly dragabbleElement: Locator;
+  readonly rootItem: Locator;
+  readonly sortableItem: Locator;
+  readonly selectableItem: Locator;
+  readonly resizableItem: Locator;
+  readonly droppableItem: Locator;
+  readonly dragabbleItem: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.rootElement = page.locator('span').filter({ hasText: 'Interactions' }).locator('div').first();
-    // this.rootElement = page.locator('span').filter({ hasText: 'Elements' }).locator('div').first()
-    this.sortableElement = page.locator('li').filter({ hasText: 'Sortable' });
-    this.selectableElement = page.locator('li').filter({ hasText: 'Selectable' });
-    this.resizableElement = page.locator('li').filter({ hasText: 'Resizable' });
-    this.droppableElement = page.locator('li').filter({ hasText: 'Droppable' });
-    this.dragabbleElement = page.locator('li').filter({ hasText: 'Dragabble' });
+    this.rootItem = page.locator('span').filter({ hasText: 'Interactions' }).locator('div').first();
+    this.sortableItem = page.locator('li').filter({ hasText: 'Sortable' });
+    this.selectableItem = page.locator('li').filter({ hasText: 'Selectable' });
+    this.resizableItem = page.locator('li').filter({ hasText: 'Resizable' });
+    this.droppableItem = page.locator('li').filter({ hasText: 'Droppable' });
+    this.dragabbleItem = page.locator('li').filter({ hasText: 'Dragabble' });
   }
 
   async isOpen() {
-    await expect(this.sortableElement).toBeVisible();
-    await expect(this.selectableElement).toBeVisible();
-    await expect(this.resizableElement).toBeVisible();
-    await expect(this.droppableElement).toBeVisible();
-    await expect(this.dragabbleElement).toBeVisible();
+    await expect(this.sortableItem).toBeVisible();
+    await expect(this.selectableItem).toBeVisible();
+    await expect(this.resizableItem).toBeVisible();
+    await expect(this.droppableItem).toBeVisible();
+    await expect(this.dragabbleItem).toBeVisible();
   }
 
   async isClose() {
-    await expect(this.sortableElement).toBeHidden();
-    await expect(this.selectableElement).toBeHidden();
-    await expect(this.resizableElement).toBeHidden();
-    await expect(this.droppableElement).toBeHidden();
-    await expect(this.dragabbleElement).toBeHidden();
+    await expect(this.sortableItem).toBeHidden();
+    await expect(this.selectableItem).toBeHidden();
+    await expect(this.resizableItem).toBeHidden();
+    await expect(this.droppableItem).toBeHidden();
+    await expect(this.dragabbleItem).toBeHidden();
   }
 }
 

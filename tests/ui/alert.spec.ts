@@ -16,7 +16,7 @@ test.describe("Alerts section tests", () => {
     });
 
   test("'Alerts' accordion section closes", async ({ alertsPage }) => {
-    await alertsPage.accordionSection.alertsSection.rootElement.click();
+    await alertsPage.accordionSection.alertsSection.rootItem.click();
     await alertsPage.accordionSection.alertsSection.isClose();
   });
 

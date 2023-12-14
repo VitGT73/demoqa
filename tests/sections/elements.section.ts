@@ -2,53 +2,54 @@ import { type Page, type Locator, expect } from "@playwright/test";
 
 export class ElementsSection {
   readonly page: Page;
-  readonly rootElement: Locator;
-  readonly textBoxElement: Locator;
-  readonly checkBoxElement: Locator;
-  readonly radioButtonElement: Locator;
-  readonly webTablesElement: Locator;
-  readonly buttonsElement: Locator;
-  readonly linksElement: Locator;
-  readonly brockenLinksElement: Locator;
-  readonly uploadAddDownloadElement: Locator;
-  readonly dynamicPropertiesElement: Locator;
+  readonly rootItem: Locator;
+  readonly textBoxItem: Locator;
+  readonly checkBoxItem: Locator;
+  readonly radioButtonItem: Locator;
+  readonly webTablesItem: Locator;
+  readonly buttonsItem: Locator;
+  readonly linksItem: Locator;
+  readonly brockenLinksItem: Locator;
+  readonly uploadAddDownloadItem: Locator;
+  readonly dynamicPropertiesItem: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.rootElement = page.locator('span').filter({ hasText: 'Elements' }).locator('div').first()
-    this.textBoxElement = page.locator('li').filter({ hasText: 'Text Box' })
-    this.checkBoxElement=  page.locator('li').filter({ hasText: 'Check Box' })
-    this.radioButtonElement =page.locator('li').filter({ hasText: 'Radio Button' })
-    this.webTablesElement =page.locator('li').filter({ hasText: 'Web Tables' })
-    this.buttonsElement =page.locator('li').filter({ hasText: 'Buttons' })
-    this.linksElement =page.locator('li').filter({ hasText: /^Links$/ })
-    this.brockenLinksElement = page.locator('li').filter({ hasText: 'Broken Links - Images' })
-    this.uploadAddDownloadElement = page.locator('li').filter({ hasText: 'Upload and Download' })
-    this.dynamicPropertiesElement = page.locator('li').filter({ hasText: 'Dynamic Properties' })
+    this.rootItem = page.locator('span').filter({ hasText: 'Elements' }).locator('div').first()
+    this.textBoxItem = page.locator('li').filter({ hasText: 'Text Box' })
+    this.checkBoxItem = page.locator('li').filter({ hasText: 'Check Box' })
+    this.radioButtonItem = page.locator('li').filter({ hasText: 'Radio Button' })
+    this.webTablesItem = page.locator('li').filter({ hasText: 'Web Tables' })
+    this.buttonsItem = page.locator('li').filter({ hasText: 'Buttons' })
+    // this.linksItem = page.locator('li').filter({ hasText: /^Links$/ })
+    this.linksItem= page.getByRole('list').getByText('Links', { exact: true });
+    this.brockenLinksItem = page.locator('li').filter({ hasText: 'Broken Links - Images' })
+this.uploadAddDownloadItem = page.locator('li').filter({ hasText: 'Upload and Download' })
+this.dynamicPropertiesItem = page.locator('li').filter({ hasText: 'Dynamic Properties' })
   }
 
 
   async isOpen(){
-    await expect(this.textBoxElement).toBeVisible();
-    await expect(this.checkBoxElement).toBeVisible();
-    await expect(this.radioButtonElement).toBeVisible();
-    await expect(this.webTablesElement).toBeVisible();
-    await expect(this.buttonsElement).toBeVisible();
-    await expect(this.linksElement).toBeVisible();
-    await expect(this.uploadAddDownloadElement).toBeVisible();
-    await expect(this.dynamicPropertiesElement).toBeVisible();
-  }
+  await expect(this.textBoxItem).toBeVisible();
+  await expect(this.checkBoxItem).toBeVisible();
+  await expect(this.radioButtonItem).toBeVisible();
+  await expect(this.webTablesItem).toBeVisible();
+  await expect(this.buttonsItem).toBeVisible();
+  await expect(this.linksItem).toBeVisible();
+  await expect(this.uploadAddDownloadItem).toBeVisible();
+  await expect(this.dynamicPropertiesItem).toBeVisible();
+}
 
   async isClose() {
-    await expect(this.textBoxElement).toBeHidden();
-    await expect(this.checkBoxElement).toBeHidden();
-    await expect(this.radioButtonElement).toBeHidden();
-    await expect(this.webTablesElement).toBeHidden();
-    await expect(this.buttonsElement).toBeHidden();
-    await expect(this.linksElement).toBeHidden();
-    await expect(this.uploadAddDownloadElement).toBeHidden();
-    await expect(this.dynamicPropertiesElement).toBeHidden();
-  }
+  await expect(this.textBoxItem).toBeHidden();
+  await expect(this.checkBoxItem).toBeHidden();
+  await expect(this.radioButtonItem).toBeHidden();
+  await expect(this.webTablesItem).toBeHidden();
+  await expect(this.buttonsItem).toBeHidden();
+  await expect(this.linksItem).toBeHidden();
+  await expect(this.uploadAddDownloadItem).toBeHidden();
+  await expect(this.dynamicPropertiesItem).toBeHidden();
+}
 }
 
 export default ElementsSection;
