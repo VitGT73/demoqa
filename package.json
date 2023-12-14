@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "codegen": "npx playwright codegen demoqa.com",
+    "codegen": "npx playwright codegen --viewport-size=1400,1080 demoqa.com",
     "test": "npx playwright test tests/ --project=chromium",
     "test:all": "npx playwright test tests/",
     "test:cromium": "npx playwright test tests/ui/ --project=chromium",

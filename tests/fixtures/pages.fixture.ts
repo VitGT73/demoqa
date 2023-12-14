@@ -1,12 +1,12 @@
 import { test as base } from "@playwright/test";
 // import { LoginPage } from "../pages/login.page";
-import HomePage from "../pages/home.page";
-import AlertsPage from "../pages/alerts.page";
-import BooksPage from "../pages/books.page";
-import ElementsPage from "../pages/elements.page";
-import FormsPage from "../pages/forms.page";
-import WidgetsPage from "../pages/widgets.page";
-import InteractionsPage from "../pages/interaction.page";
+import AlertsPage from "../page-objects/pages/alerts.page";
+import BooksPage from "../page-objects/pages/books.page";
+import ElementsPage from "../page-objects/pages/elements.page";
+import FormsPage from "../page-objects/pages/forms.page";
+import HomePage from '../page-objects/pages/home.page';
+import InteractionsPage from "../page-objects/pages/interaction.page";
+import WidgetsPage from "../page-objects/pages/widgets.page";
 // import { RegisterPage } from "../pages/register.page";
 
 type DemoqaPages = {

@@ -1,8 +1,12 @@
 import { type Page, type Locator , expect } from '@playwright/test';
+import {TextBoxInterface} from '../../../interfaces/textbox.interface'
 
-export class TextBoxSection {
+export class TextBoxExample {
     readonly page: Page;
     readonly url: string;
+    readonly headerText: string;
+    readonly header: Locator;
+
     readonly fullnameInput:Locator;
     readonly emailInput :Locator;
     readonly currentAddressInput :Locator;
@@ -12,6 +16,9 @@ export class TextBoxSection {
     constructor(page: Page) {
       this.page = page;
       this.url = "/text-box";
+      this.headerText = "Text Box";
+      this.header = page.getByText('Text Box');
+
       this.fullnameInput = page.getByPlaceholder('Full Name');
       this.emailInput = page.getByPlaceholder('name@example.com');
       this.currentAddressInput = page.getByPlaceholder('Current Address');
@@ -23,7 +30,21 @@ export class TextBoxSection {
     async load(){
       await this.page.goto(this.url,{waitUntil: 'domcontentloaded'});
     }
-    
+
+    async assertPageHeader() {
+      await expect(this.header).toHaveText(this.headerText);
+    }
+
+    async assertPageUrl() {
+      await expect(this.page).toHaveURL(this.url);
+    }
+
+    async FillForm(data: TextBoxInterface){
+      this.fullnameInput.fill(data.fullName);
+      this.emailInput.fill(data.email);
+      this.currentAddressInput.fill(data.currentAddress);
+      this.submintButton.fill(data.permanentAddress);
+      }
    }
 
-  export default TextBoxSection
+  export default TextBoxExample

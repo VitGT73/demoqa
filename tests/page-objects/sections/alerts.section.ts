@@ -11,17 +11,14 @@ export class AlertsSection {
 
   constructor(page: Page) {
     this.page = page;
-   // this.rootItem =  page.getByText('Alerts, Frame & Windows')
+
     this.rootItem = page.locator('span').filter({ hasText: 'Alerts, Frame & Windows' }).locator('div').first()
     this.browserWindowsItem =page.locator('li').filter({ hasText: 'Browser Windows' });
     this.alertsItem =page.locator('li').filter({ hasText: 'Alerts' });
     this.framesItem =page.locator('li').filter({ hasText: /^Frames$/ });
     this.nestedFramesItem =page.locator('li').filter({ hasText: 'Nested Frames' });
     this.modalDialogItem =page.locator('li').filter({ hasText: 'Modal Dialogs' });
-
-
   }
-
 
   async isOpen(){
     await expect(this.browserWindowsItem).toBeVisible();
@@ -37,10 +34,7 @@ export class AlertsSection {
     await expect(this.framesItem).toBeHidden();
     await expect(this.nestedFramesItem).toBeHidden();
     await expect(this.modalDialogItem).toBeHidden();
-
   }
 }
-
-
 
 export default AlertsSection

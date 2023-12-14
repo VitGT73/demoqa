@@ -37,14 +37,10 @@ export class HomePage {
     this.widgetsPage = new WidgetsPage(page);
     this.elementsCard = page.getByRole("heading", { name: "Elements" });
     this.formsCard = page.getByRole("heading", { name: "Forms" });
-    this.alertsCard = page.getByRole("heading", {
-      name: "Alerts, Frame & Windows",
-    });
+    this.alertsCard = page.getByRole("heading", { name: "Alerts, Frame & Windows" });
     this.widgetsCard = page.getByRole("heading", { name: "Widgets" });
     this.interactionsCard = page.getByRole("heading", { name: "Interactions" });
-    this.booksCard = page.getByRole("heading", {
-      name: "Book Store Application",
-    });
+    this.booksCard = page.getByRole("heading", { name: "Book Store Application" });
   }
 
   async load() {

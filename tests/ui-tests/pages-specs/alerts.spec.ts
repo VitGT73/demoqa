@@ -1,5 +1,5 @@
 // import { test, expect } from '@playwright/test';
-import { test, expect } from "../fixtures/pages.fixture";
+import { test } from "../../fixtures/pages.fixture";
 
 test.describe("Alerts section tests", () => {
   // test.beforeEach(async ({ page, homePage }) => {

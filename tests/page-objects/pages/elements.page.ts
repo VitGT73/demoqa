@@ -1,7 +1,7 @@
 import { type Page, type Locator, expect } from "@playwright/test";
 import { AccordionSection } from "../sections/accordion.section";
 
-export class AlertsPage {
+export class ElementsPage {
   readonly page: Page;
   readonly url: string;
   readonly headerText: string;
@@ -10,11 +10,12 @@ export class AlertsPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.url = "/alertsWindows";
-    this.accordionSection = new AccordionSection(page);
+    this.url = "/elements";
     //   this.url = process.env.BASE_URL + "/";
-    this.headerText = "Alerts, Frame & Windows";
-    this.header = page.getByText("Alerts, Frame & Windows").first();
+    this.accordionSection = new AccordionSection(page);
+    this.headerText = "Elements";
+    this.header = page.getByText("Elements").first();
+    this.accordionSection = new AccordionSection(page);
   }
 
   async load() {
@@ -30,4 +31,4 @@ export class AlertsPage {
   }
 }
 
-export default AlertsPage;
+export default ElementsPage;
