@@ -1,4 +1,9 @@
 import { type Page, type Locator, expect } from "@playwright/test";
+import { BrowserWindowsExample } from "../examples/alerts/browser.example";
+import { AlertsExample } from "../examples/alerts/alert.example";
+import { FramesExample } from "../examples/alerts/frames.example";
+import { NestedFramesExample } from "../examples/alerts/nestedframes.example";
+import { ModalDialogsExample } from "../examples/alerts/modal.example";
 
 export class AlertsSection {
   readonly page: Page;
@@ -8,6 +13,11 @@ export class AlertsSection {
   readonly framesItem:Locator;
   readonly nestedFramesItem: Locator;
   readonly modalDialogItem: Locator;
+  readonly browserWindowsExample :BrowserWindowsExample;
+  readonly alertsExample :AlertsExample;
+  readonly framesExample:FramesExample;
+  readonly nestedFramesExample: NestedFramesExample;
+  readonly modalDialogExample: ModalDialogsExample;
 
   constructor(page: Page) {
     this.page = page;
@@ -18,6 +28,12 @@ export class AlertsSection {
     this.framesItem =page.locator('li').filter({ hasText: /^Frames$/ });
     this.nestedFramesItem =page.locator('li').filter({ hasText: 'Nested Frames' });
     this.modalDialogItem =page.locator('li').filter({ hasText: 'Modal Dialogs' });
+    this.browserWindowsExample=new BrowserWindowsExample(page);
+    this.alertsExample=new AlertsExample(page);
+    this.framesExample=new FramesExample(page);
+    this.nestedFramesExample=new NestedFramesExample(page);
+    this.modalDialogExample=new ModalDialogsExample(page);
+
   }
 
   async isOpen(){

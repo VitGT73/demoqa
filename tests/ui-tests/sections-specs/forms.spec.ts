@@ -1,6 +1,6 @@
 import { test } from "../../fixtures/pages.fixture";
 
-test.describe.only ("@Smoke Form page. Section - 'Forms', open every example", () => {
+test.describe ("@Smoke Form page. Section - 'Forms', open every example", () => {
     test.beforeEach(async ({ formsPage }) => {
         await formsPage.load();
     });
