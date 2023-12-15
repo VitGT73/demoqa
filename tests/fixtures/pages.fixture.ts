@@ -9,7 +9,7 @@ import InteractionsPage from "../page-objects/pages/interaction.page";
 import WidgetsPage from "../page-objects/pages/widgets.page";
 // import { RegisterPage } from "../pages/register.page";
 
-type DemoqaPages = {
+export type DemoqaPages = {
   homePage: HomePage;
   alertsPage: AlertsPage;
   booksPage: BooksPage;

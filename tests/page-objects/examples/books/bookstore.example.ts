@@ -1,7 +1,7 @@
 import { type Page, type Locator , expect } from '@playwright/test';
 // import {TextBoxInterface} from '../../../interfaces/textbox.interface'
 
-export class LoginExample {
+export class BookStoreExample {
     readonly page: Page;
     readonly url: string;
     readonly headerText: string;
@@ -10,9 +10,9 @@ export class LoginExample {
 
     constructor(page: Page) {
       this.page = page;
-      this.url = "/login";
-      this.headerText = "Login";
-      this.header = page.getByText('Login');
+      this.url = "/books";
+      this.headerText = "Book Store";
+      this.header = page.getByText('Book Store');
    }
 
     async load(){
@@ -29,4 +29,4 @@ export class LoginExample {
 
    }
 
-  export default LoginExample
+  export default BookStoreExample

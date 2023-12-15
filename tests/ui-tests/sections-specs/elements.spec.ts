@@ -1,7 +1,7 @@
 // import { test, expect } from '@playwright/test';
 import { test } from "../../fixtures/pages.fixture";
 
-test.describe("@Smoke Forms page. Section - 'Elements', open every example", () => {
+test.describe("@Smoke Elements page. Section - 'Elements', open every example", () => {
     test.beforeEach(async ({ elementsPage }) => {
         await elementsPage.load();
     });
