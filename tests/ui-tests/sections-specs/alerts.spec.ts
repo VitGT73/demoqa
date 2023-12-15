@@ -1,6 +1,6 @@
 import { test } from "../../fixtures/pages.fixture";
 
-test.describe.only ("@Smoke Alerts page. Section - 'Alerts', open every example", () => {
+test.describe ("@Smoke Alerts page. Section - 'Alerts', open every example", () => {
     test.beforeEach(async ({ alertsPage }) => {
         await alertsPage.load();
     });
