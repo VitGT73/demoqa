@@ -1,10 +1,31 @@
-import {TextBoxInterface} from '../interfaces/textbox.interface'
+// import { TextBoxInterface } from '../interfaces/textbox.interface'
 
-export const testUserData: TextBoxInterface = {
-  fullName: 'John Doe',
-  email: 'john.doe@example.com',
-  currentAddress: '123 Main Street, City, Country',
-  permanentAddress: '456 Park Avenue, Town, Country',
-};
+import { fakerRU as faker } from '@faker-js/faker'
 
-export {TextBoxInterface} from '../interfaces/textbox.interface'
+export class TextboxRandomData {
+
+    constructor() {
+    }
+    getFullName() {
+      return 'John Doe'
+    }
+    getEmail(isValid: boolean): string {
+      if (isValid) {
+        // Генерация валидного email
+        return faker.internet.email();
+      } else {
+        // Генерация невалидного email
+        return 'invalid-email';
+      }
+    }
+    getCurrentAddress() {
+      return '123 Main Street, City, Country'
+    }
+    getPermanentAddress() {
+      return '456 Park Avenue, Town, Country'
+    }
+}
+
+export default TextboxRandomData
+
+// export { TextBoxInterface } from '../interfaces/textbox.interface'
