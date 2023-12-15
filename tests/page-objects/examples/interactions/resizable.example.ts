@@ -1,7 +1,6 @@
 import { type Page, type Locator , expect } from '@playwright/test';
-// import {TextBoxInterface} from '../../../interfaces/textbox.interface'
 
-export class DynamicPropertiesExample {
+export class ResizableExamples {
     readonly page: Page;
     readonly url: string;
     readonly headerText: string;
@@ -10,9 +9,9 @@ export class DynamicPropertiesExample {
 
     constructor(page: Page) {
       this.page = page;
-      this.url = "/dynamic-properties";
-      this.headerText = "Dynamic Properties";
-      this.header = page.locator("//div[@class='main-header']");
+      this.url = "/resizable";
+      this.headerText = "Resizable";
+      this.header = page.getByText('Resizable');
    }
 
     async load(){
@@ -29,4 +28,4 @@ export class DynamicPropertiesExample {
 
    }
 
-  export default DynamicPropertiesExample
+  export default ResizableExamples

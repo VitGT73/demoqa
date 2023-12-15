@@ -12,7 +12,7 @@ export class UploadAndDownloadExample {
       this.page = page;
       this.url = "/upload-download";
       this.headerText = "Upload and Download";
-      this.header = page.getByText('Upload and Download');
+      this.header = page.locator("//div[@class='main-header']");
    }
 
     async load(){

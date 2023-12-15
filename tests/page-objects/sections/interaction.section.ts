@@ -1,4 +1,9 @@
 import { type Page, type Locator, expect } from "@playwright/test";
+import {SortableExamples} from '../examples/interactions/sortable.example'
+import {SelectableExamples} from '../examples/interactions/selectable.example'
+import {ResizableExamples} from '../examples/interactions/resizable.example'
+import {DroppableExamples} from '../examples/interactions/droppable.example'
+import {DragabbleExamples} from '../examples/interactions/dragabble.example'
 
 export class InteractionsSection {
   readonly page: Page;
@@ -8,6 +13,11 @@ export class InteractionsSection {
   readonly resizableItem: Locator;
   readonly droppableItem: Locator;
   readonly dragabbleItem: Locator;
+  readonly sortableExample:SortableExamples;
+  readonly selectableExamples:SelectableExamples;
+  readonly resizableExamples:ResizableExamples;
+  readonly droppableExamples:DroppableExamples;
+  readonly dragabbleExamples:DragabbleExamples;
 
   constructor(page: Page) {
     this.page = page;
@@ -17,6 +27,11 @@ export class InteractionsSection {
     this.resizableItem = page.locator('li').filter({ hasText: 'Resizable' });
     this.droppableItem = page.locator('li').filter({ hasText: 'Droppable' });
     this.dragabbleItem = page.locator('li').filter({ hasText: 'Dragabble' });
+    this.sortableExample=new SortableExamples(page);
+    this.selectableExamples=new SelectableExamples(page);
+    this.resizableExamples=new ResizableExamples(page);
+    this.droppableExamples=new DroppableExamples(page);
+    this.dragabbleExamples=new DragabbleExamples(page);
   }
 
   async isOpen() {
@@ -35,7 +50,5 @@ export class InteractionsSection {
     await expect(this.dragabbleItem).toBeHidden();
   }
 }
-
-
 
 export default InteractionsSection

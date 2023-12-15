@@ -12,7 +12,7 @@ export class LinksExample {
       this.page = page;
       this.url = "/links";
       this.headerText = "Links";
-      this.header = page.getByText('Links');
+      this.header = page.locator("//div[@class='main-header']");
    }
 
     async load(){

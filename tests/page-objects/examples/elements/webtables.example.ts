@@ -12,7 +12,7 @@ export class WebTablesExample {
       this.page = page;
       this.url = "/webtables";
       this.headerText = "Web Tables";
-      this.header = page.getByText('Web Tables');
+      this.header = page.locator("//div[@class='main-header']");
    }
 
     async load(){

@@ -12,7 +12,7 @@ export class RadioButtonExample {
       this.page = page;
       this.url = "/radio-button";
       this.headerText = "Radio Button";
-      this.header = page.getByText('Radio Button');
+      this.header = page.locator("//div[@class='main-header']");
    }
 
     async load(){

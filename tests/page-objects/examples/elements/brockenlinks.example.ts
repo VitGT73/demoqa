@@ -12,7 +12,7 @@ export class BrokenLinksExample {
       this.page = page;
       this.url = "/broken";
       this.headerText = "Broken Links - Images";
-      this.header = page.getByText('Broken Links - Images');
+      this.header = page.locator("//div[@class='main-header']");
    }
 
     async load(){

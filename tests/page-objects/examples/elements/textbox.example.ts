@@ -17,7 +17,8 @@ export class TextBoxExample {
       this.page = page;
       this.url = "/text-box";
       this.headerText = "Text Box";
-      this.header = page.getByText('Text Box');
+      this.header = page.locator("//div[@class='main-header']");
+      // this.header = page.getByText('Text Box').first();
 
       this.fullnameInput = page.getByPlaceholder('Full Name');
       this.emailInput = page.getByPlaceholder('name@example.com');

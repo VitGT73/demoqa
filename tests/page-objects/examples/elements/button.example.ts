@@ -12,7 +12,7 @@ export class ButtonExample {
       this.page = page;
       this.url = "/buttons";
       this.headerText = "Buttons";
-      this.header = page.getByText('Buttons');
+      this.header = page.locator("//div[@class='main-header']");
    }
 
     async load(){

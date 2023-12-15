@@ -13,8 +13,8 @@ export class CheckboxExample {
     this.page = page;
     this.url = "/checkbox";
     this.headerText = "Check Box";
-    this.header = page.getByText('Check Box');
-    
+    this.header = page.locator("//div[@class='main-header']");
+
     this.expandAllButton = page.getByRole('button').getByTitle('Expand all');
     this.collapseAllButton = page.getByRole('button').getByTitle('Collapse all');
   }

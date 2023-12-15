@@ -1,6 +1,6 @@
 import { test } from "../../fixtures/pages.fixture";
 
-test.describe.only ("@Smoke Widgets page. Section - 'Widgets', open every example", () => {
+test.describe ("@Smoke Widgets page. Section - 'Widgets', open every example", () => {
     test.beforeEach(async ({ widgetsPage }) => {
         await widgetsPage.load();
     });
