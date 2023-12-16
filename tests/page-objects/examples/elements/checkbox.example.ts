@@ -31,6 +31,7 @@ export class CheckboxExample {
     await expect(this.page).toHaveURL(this.url);
   }
 
+
 }
 
 export default CheckboxExample

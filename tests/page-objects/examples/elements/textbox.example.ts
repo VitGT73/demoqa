@@ -11,7 +11,7 @@ export class TextBoxExample {
     readonly emailInput :Locator;
     readonly currentAddressInput :Locator;
     readonly permanentAddressInput :Locator;
-    readonly submintButton: Locator;
+    readonly submitButton: Locator;
 
     readonly fullnameAnswer: Locator;
     readonly emailAnswer: Locator;  // ограничения смотри в конце этого файла
@@ -29,7 +29,7 @@ export class TextBoxExample {
       this.emailInput = page.getByPlaceholder('name@example.com');
       this.currentAddressInput = page.getByPlaceholder('Current Address');
       this.permanentAddressInput = page.locator('#permanentAddress');
-      this.submintButton = page.getByRole('button', { name: 'Submit' });
+      this.submitButton = page.getByRole('button', { name: 'Submit' });
 
       this.fullnameAnswer = page.locator("//p[@id='name']");
       this.emailAnswer = page.locator("//p[@id='email']");
@@ -50,13 +50,48 @@ export class TextBoxExample {
       await expect(this.page).toHaveURL(this.url);
     }
 
+    async assertFullName(fullname:string){
+      await expect(this.fullnameAnswer).toHaveText("Name:" + fullname);
+    }
+    async assertValidEmail(email:string){
+      await expect(this.emailInput).not.toHaveClass(/field-error/)
+      await expect(this.emailAnswer).toHaveText("Email:"+email);
+    }
+
+    async assertNoValidEmail(){
+      await expect(this.emailInput).toHaveClass(/field-error/)
+    }
+    async assertCurrentAddress(address:string){
+      await expect(this.currentAddressAnswer).toHaveText("Current Address :"+address);
+    }
+
+    async assertPermanentAddress(address:string){
+      await expect(this.permanentAddressAnswer).toHaveText("Permananet Address :"+address);
+    }
+
+
     async FillForm(data: TextBoxInterface){
-      this.fullnameInput.fill(data.fullName);
-      this.emailInput.fill(data.email);
-      this.currentAddressInput.fill(data.currentAddress);
-      this.submintButton.fill(data.permanentAddress);
+      await this.fullnameInput.fill(data.fullName);
+      await this.emailInput.fill(data.email);
+      await this.currentAddressInput.fill(data.currentAddress);
+      await this.permanentAddressInput.fill(data.permanentAddress);
+      await this.submitButton.click();
       }
-   }
+
+
+    async assertValidForm(data: TextBoxInterface){
+      await this.assertFullName(data.fullName);
+      await this.assertValidEmail(data.email);
+      await this.assertCurrentAddress(data.currentAddress);
+      await this.assertPermanentAddress(data.permanentAddress);
+    }
+
+
+    async assertNoValidForm(){
+      await this.assertNoValidEmail()
+    }
+  }
+
 
   export default TextBoxExample
 
