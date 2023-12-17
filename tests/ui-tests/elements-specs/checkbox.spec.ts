@@ -7,27 +7,22 @@ test.describe("Check Box element tests", () => {
         await checkboxPage.assertPageHeader();
     });
 
-    test.only("Test Expand and Collapse in checkbox", async ({ checkboxPage }) => {
+    test.only("Test Expand All in checkbox", async ({ checkboxPage }) => {
         await checkboxPage.expandAllButton.click();
+        await checkboxPage.assertExpandAll();
+
+
+    });
+    test.only("Test Collapse All in checkbox", async ({ checkboxPage }) => {
+        // await checkboxPage.expandAllButton.click();
         // await checkboxPage.collapseAllButton.click();
+        await checkboxPage.assertCollapseAll();
+    });
 
-        await checkboxPage.homeToggle.click()
-        await checkboxPage.homeToggle.click()
-
-        await checkboxPage.desktopToggle.click()
-        await checkboxPage.desktopToggle.click()
-
-        await checkboxPage.documentsToggle.click()
-        await checkboxPage.documentsToggle.click()
-
-        await checkboxPage.workspaceToggle.click()
-        await checkboxPage.workspaceToggle.click()
-
-        await checkboxPage.officeToggle.click()
-        await checkboxPage.officeToggle.click()
-
-        await checkboxPage.downloadsToggle.click()
-        await checkboxPage.downloadsToggle.click()
-
+    test.only("Test Expand Office group in checkbox", async ({ checkboxPage }) => {
+        await checkboxPage.expandAllButton.click();
+        await checkboxPage.officeToggle.click();
+        await checkboxPage.officeToggle.click();
+        await checkboxPage.assertExpandOffice();
     });
 });
