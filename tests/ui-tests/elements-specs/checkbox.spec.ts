@@ -55,12 +55,35 @@ test.describe("Check Box element tests", () => {
     });
 });
 
-test.describe("Check Box element tests", () => {
+test.describe.only("Check Box element tests", () => {
     test("Collapse All in checkbox by default", async ({ checkboxPageExpandAll }) => {
         await checkboxPageExpandAll.collapseAllButton.click();
         await checkboxPageExpandAll.assertCollapseAll();
     });
-
+    test("Collapse Home in checkbox by default", async ({ checkboxPageExpandAll }) => {
+        await checkboxPageExpandAll.homeToggle.click();
+        await checkboxPageExpandAll.assertCollapseHome();
+    });
+    test("Collapse Desktop in checkbox by default", async ({ checkboxPageExpandAll }) => {
+        await checkboxPageExpandAll.desktopToggle.click();
+        await checkboxPageExpandAll.assertCollapseDesktop();
+    });
+    test("Collapse Documents in checkbox by default", async ({ checkboxPageExpandAll }) => {
+        await checkboxPageExpandAll.documentsToggle.click();
+        await checkboxPageExpandAll.assertCollapseDocuments();
+    });
+    test("Collapse Office in checkbox by default", async ({ checkboxPageExpandAll }) => {
+        await checkboxPageExpandAll.officeToggle.click();
+        await checkboxPageExpandAll.assertCollapseOffice();
+    });
+    test("Collapse Work Spaces in checkbox by default", async ({ checkboxPageExpandAll }) => {
+        await checkboxPageExpandAll.workspaceToggle.click();
+        await checkboxPageExpandAll.assertCollapseWorkSpace();
+    });
+    test("Collapse Downloads in checkbox by default", async ({ checkboxPageExpandAll }) => {
+        await checkboxPageExpandAll.downloadsToggle.click();
+        await checkboxPageExpandAll.assertCollapseDownloads();
+    });
 
 
 
