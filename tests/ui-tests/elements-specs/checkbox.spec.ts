@@ -55,7 +55,7 @@ test.describe("Check Box element tests", () => {
     });
 });
 
-test.describe.only("Check Box element tests", () => {
+test.describe("Check Box element tests", () => {
     test("Collapse All in checkbox by default", async ({ checkboxPageExpandAll }) => {
         await checkboxPageExpandAll.collapseAllButton.click();
         await checkboxPageExpandAll.assertCollapseAll();

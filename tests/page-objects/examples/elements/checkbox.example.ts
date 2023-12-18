@@ -57,11 +57,7 @@ export class CheckboxExample {
     this.expandAllButton = page.getByRole('button', { name: 'Expand all' });
     this.collapseAllButton = page.getByRole('button', { name: 'Collapse all' });
 
-    // toggles
-
-
-
-
+    //Check boxes
 
     this.checkboxHome = page.locator('label').filter({ hasText: 'Home' });
     this.checkboxDesktop = page.locator('label').filter({ hasText: 'Desktop' });
@@ -81,6 +77,7 @@ export class CheckboxExample {
     this.checkboxWord = page.locator('label').filter({ hasText: 'Word File.doc' })
     this.checkboxExcel = page.locator('label').filter({ hasText: 'Excel File.doc' })
 
+    // toggles
     this.homeToggle = this.checkboxHome.locator("xpath=/preceding-sibling::button")
     // this.homeToggle = page.locator('label').filter({ hasText: 'Home' }).locator("xpath=/preceding-sibling::button")
     // this.homeToggle = page.locator("//label[@for='tree-node-home']").locator("xpath=/preceding-sibling::button")
@@ -90,11 +87,6 @@ export class CheckboxExample {
     this.workspaceToggle = this.checkboxWorkSpace.locator("xpath=/preceding-sibling::button")
     this.officeToggle = this.checkboxOffice.locator("xpath=/preceding-sibling::button")
     this.downloadsToggle = this.checkboxDownloads.locator("xpath=/preceding-sibling::button")
-    // this.documentsToggle = page.locator("//label[@for='tree-node-documents']/preceding-sibling::button")
-    // this.workspaceToggle = page.locator("//label[@for='tree-node-workspace']/preceding-sibling::button")
-    // this.officeToggle = page.locator("//label[@for='tree-node-office']/preceding-sibling::button")
-    // this.downloadsToggle = page.locator("//label[@for='tree-node-downloads']/preceding-sibling::button")
-
     this.resultMessage = page.locator('#result')
 
   }

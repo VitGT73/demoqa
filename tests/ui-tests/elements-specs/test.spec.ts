@@ -1,25 +1,30 @@
-import { test, expect } from "@playwright/test";
+import { test } from '@playwright/test';
+import { CheckboxPage } from './test.example';
 
-test.describe("Check Box element tests", () => {
+test.describe.only("Check Box element tests", () => {
+    // Случайным образом выбираем несколько чекбоксов (например, 3)
+
+    test('Click on the "Desktop" checkbox', async ({ page }) => {
+        const checkboxPage = new CheckboxPage(page);
+        checkboxPage.page.goto(checkboxPage.url, { waitUntil: 'domcontentloaded' })
+        checkboxPage.expandAllButton.click();
+
+        await checkboxPage.checkboxes['Desktop'].click();
+        console.log('Clicked on the "Desktop" checkbox');
+        await page.waitForTimeout(3000)
+        // Дополнительные проверки или действия, если необходимо
+    // });
+
+    // test('Click on a random checkbox', async ({ page }) => {
+        // const checkboxPage = new CheckboxPage(page);
+        // checkboxPage.page.goto(checkboxPage.url, { waitUntil: 'domcontentloaded' })
+        // checkboxPage.expandAllButton.click();
 
 
-    test("Test Expand and Collapse in checkbox", async ({ page }) => {
-        await page.goto('https://demoqa.com/checkbox', { waitUntil: "domcontentloaded" });
+  // Указываем количество чек-боксов для клика
+        const count = 3;
+        await checkboxPage.clickRandomCheckboxes(count);
+        await page.waitForTimeout(3000)
+    });
 
-        await page.getByLabel('Expand all').click();
-        await page.getByLabel('Collapse all').click();
-
-        await page.getByTitle('Expand all').click();
-        await page.getByTitle('Collapse all').click();
-
-        await page.locator("//button[@title='Expand all']").click();
-        await page.locator("//button[@title='Collapse all']").click();
-
-        await page.getByRole('button',{name:'Expand all'}).click();
-        await page.getByRole('button',{name:'Collapse all'}).click();
-        // await page.getByRole('button').getByLabel('Collapse all').click();
-
-        // await page.getByRole('button').getByTitle('Expand all').click();
-        // await page.getByRole('button').getByTitle('Collapse all').click();
-    })
 })
