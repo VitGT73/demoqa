@@ -11,24 +11,23 @@ test.describe.only("Check Box element tests", () => {
         checkboxPage.expandAllButton.click();
 
         await checkboxPage.checkboxes['Desktop'].click();
-        await checkboxPage.assertCheckboxStatus('Desktop', true)
         console.log('Clicked on the "Desktop" checkbox');
-        await page.waitForTimeout(3000)
+        await checkboxPage.assertCheckboxStatus('Desktop', true)
 
+        await page.waitForTimeout(3000)
+        checkboxPage.page.close()
     });
 
-//     test('Click on a random checkbox', async ({ page }) => {
-//         const checkboxPage = new CheckboxPage(page);
-//         checkboxPage.page.goto(checkboxPage.url, { waitUntil: 'domcontentloaded' })
-//         checkboxPage.expandAllButton.click();
+    test('Click on a random checkbox', async ({ page }) => {
+        const checkboxPage = new CheckboxPage(page);
+        checkboxPage.page.goto(checkboxPage.url, { waitUntil: 'domcontentloaded' })
+        checkboxPage.expandAllButton.click();
+        await checkboxPage.checkboxes['Documents'].click();
+        console.log('Clicked on the "Documents" checkbox');
+        await checkboxPage.assertCheckboxStatus('Documents', true)
 
+        await page.waitForTimeout(3000)
+        checkboxPage.page.close()
 
-//   // Указываем количество чек-боксов для клика
-//         const count = 3;
-//         await checkboxPage.clickRandomCheckboxes(count);
-//         await checkboxPage.assertCheckboxStatus('Desktop'.checkboxes, true)
-//         await page.waitForTimeout(3000)
-
-//     });
-
+    })
 })

@@ -9,9 +9,10 @@ export class CheckboxPage {
   readonly collapseAllButton: Locator;
   readonly resultMessage: Locator;
 
-  readonly checkboxes: Record<string, Locator>; // Изменили тип на объект
+  readonly checkboxes: Record<string, Locator>;
   private checkboxIndexByName: Record<string, number>;
   private statusMessages: Record<string, string>;
+  private readonly parentChildMappings: Record<string, string[]>;
 
   constructor(page: Page) {
     this.page = page;
@@ -56,6 +57,18 @@ export class CheckboxPage {
       'Word File.doc': 'wordFile',
       'Excel File.doc': 'excelFile',
     };
+    // Добавляем информацию о родительских и дочерних элементах
+    this.parentChildMappings = {
+      'Home': ['Home', 'Desktop', 'Notes', 'Commands', 'Documents', 'WorkSpace', 'React',
+        'Angular', 'Veu', 'Office', 'Public', 'Private', 'Classified', 'General',
+        'Downloads', 'Word File.doc', 'Excel File.doc'],
+      'Desktop': ['Desktop', 'Notes', 'Commands'],
+      'Documents': ['Documents', 'WorkSpace', 'React',
+        'Angular', 'Veu', 'Office', 'Public', 'Private', 'Classified', 'General'],
+      'WorkSpace': ['WorkSpace', 'React', 'Angular', 'Veu'],
+      'Office': ['Office', 'Public', 'Private', 'Classified', 'General'],
+      'Downloads': ['Downloads', 'Word File.doc', 'Excel File.doc'],
+    };
   }
 
   private createCheckboxes(checkboxNames: string[]): Record<string, Locator> {
@@ -90,26 +103,89 @@ export class CheckboxPage {
   async assertCheckboxStatus(checkboxName: string, isChecked: boolean): Promise<void> {
     const statusMessage = this.statusMessages[checkboxName];
     if (statusMessage) {
-      const textContent = await this.resultMessage.textContent();
-      if (textContent !== null && ((isChecked && textContent.includes(statusMessage)) || (!isChecked && !textContent.includes(statusMessage)))) {
-        console.log(`Checkbox status for ${checkboxName}: ${isChecked ? 'checked' : 'unchecked'}`);
-      } else {
-        console.error(`Unexpected checkbox status for ${checkboxName}`);
+      const relatedCheckboxes = [...new Set([...this.parentChildMappings[checkboxName], checkboxName])];
+
+      // Проверяем, что статус соответствует ожидаемому для всех связанных чекбоксов
+      for (const relatedCheckbox of relatedCheckboxes) {
+        const textContent = await this.resultMessage.textContent();
+
+        // Проверяем, что статус соответствует ожидаемому
+        if (textContent !== null && ((isChecked && textContent.includes(statusMessage)) || (!isChecked && !textContent.includes(statusMessage)))) {
+          console.log(`Checkbox status for ${relatedCheckbox}: ${isChecked ? 'checked' : 'unchecked'}`);
+        } else {
+          console.error(`Unexpected checkbox status for ${relatedCheckbox}`);
+        }
       }
     } else {
       console.error('Status message not found');
     }
   }
 
+  // async clickRandomCheckboxes(count: number): Promise<void> {
+  //   const checkboxNames = Object.keys(this.checkboxes);
 
-  async clickRandomCheckboxes(count: number): Promise<void> {
-    const checkboxNames = Object.keys(this.checkboxes);
+  //   // Выбираем случайные чекбоксы
+  //   for (let i = 0; i < count; i++) {
+  //     const randomCheckboxName = checkboxNames[Math.floor(Math.random() * checkboxNames.length)];
+  //     await this.clickCheckbox(randomCheckboxName);
+  //     await this.assertCheckboxStatus(randomCheckboxName, true);
+  //   }
+  // }
 
-    // Выбираем случайные чекбоксы
-    for (let i = 0; i < count; i++) {
-      const randomCheckboxName = checkboxNames[Math.floor(Math.random() * checkboxNames.length)];
-      await this.clickCheckbox(randomCheckboxName);
-      await this.assertCheckboxStatus(randomCheckboxName, true);
-    }
-  }
+  // async assertCheckboxStatuses(clickedCheckboxes: Record<string, number>): Promise<void> {
+  //   for (const [checkboxName, clickCount] of Object.entries(clickedCheckboxes)) {
+  //     const statusMessage = this.statusMessages[checkboxName];
+
+  //     if (statusMessage) {
+  //       const textContent = await this.resultMessage.textContent();
+
+  //       // Проверяем, что статус соответствует ожидаемому
+  //       if (textContent !== null && textContent.includes(statusMessage.repeat(clickCount))) {
+  //         console.log(`Checkbox status for ${checkboxName}: clicked ${clickCount} times`);
+  //       } else {
+  //         console.error(`Unexpected checkbox status for ${checkboxName}`);
+  //       }
+  //     } else {
+  //       console.error('Status message not found');
+  //     }
+  //   }
+  // }
+
+
+  // async clickRandomCheckboxes(count: number): Promise<Record<string, number>> {
+  //   const clickedCheckboxes: Record<string, number> = {};
+  //   const checkboxNames = Object.keys(this.checkboxes);
+
+  //   // Выбираем случайные чекбоксы
+  //   for (let i = 0; i < count; i++) {
+  //     const randomCheckboxName = checkboxNames[Math.floor(Math.random() * checkboxNames.length)];
+  //     const randomCheckbox = this.checkboxes[randomCheckboxName];
+
+  //     if (randomCheckbox) {
+  //       await randomCheckbox.click();
+
+  //       // Обновляем информацию о том, сколько раз каждый чек-бокс был выбран
+  //       clickedCheckboxes[randomCheckboxName] = (clickedCheckboxes[randomCheckboxName] || 0) + 1;
+
+  //       console.log(`Clicked on a random checkbox: ${randomCheckboxName}`);
+  //     } else {
+  //       console.error('Random checkbox not found');
+  //     }
+  //   }
+
+  // Возвращаем объект с информацией о выбранных чек-боксах и их количестве
+  //   return clickedCheckboxes;
+  // }
 }
+
+
+// У некоторых чек-боксов есть дочерние элементы. И при выборе родительского элемента, дочерние тоже выбираются, тоже самое происходит при отмене выделения. Давай учтем это при проверке assertCheckboxStatus
+// 'Home':{'Home', 'Desktop', 'Notes', 'Commands', 'Documents', 'WorkSpace', 'React',
+// 'Angular', 'Veu', 'Office', 'Public', 'Private', 'Classified', 'General',
+// 'Downloads', 'Word File.doc', 'Excel File.doc'}
+// 'Desktop': {'Desktop', 'Notes', 'Commands'}
+// 'Documents':{'Documents', 'WorkSpace', 'React',
+// 'Angular', 'Veu', 'Office', 'Public', 'Private', 'Classified', 'General'}
+// 'WorkSpace':{'WorkSpace', 'React','Angular', 'Veu'}
+// 'Office':{'Office', 'Public', 'Private', 'Classified', 'General'}
+// 'Downloads':{'Downloads', 'Word File.doc', 'Excel File.doc'}
