@@ -170,9 +170,6 @@ export class CheckboxExample {
     }
   }
 // Проверки
-
-
-
   async assertPageHeader() {
     await expect(this.header).toHaveText(this.headerText);
   }
@@ -264,7 +261,7 @@ export class CheckboxExample {
       for (const childCheckboxName of childCheckboxNames) {
         const childCheckbox = this.checkboxes[childCheckboxName];
         const isChildVisible = await childCheckbox.isVisible();
-        console.log(`У Чек-бокса ${childCheckboxName} видимость: ${isChildVisible}`)
+        // console.log(`У Чек-бокса ${childCheckboxName} видимость: ${isChildVisible}`)
         if (isChildVisible !== isOpening) {
           return false;
         }
@@ -275,7 +272,7 @@ export class CheckboxExample {
 
     async assertVisibilityCheckBoxes(toggleName: string, isOpening: boolean) {
       const res = await this.CheckVisibilityForToggle(toggleName, isOpening)
-      console.log("Результат:  ", res)
+      // console.log("Результат:  ", res)
       await expect(res).toBeTruthy()
     }
 

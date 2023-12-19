@@ -1,4 +1,7 @@
 import { test, expect } from "../../fixtures/elements.fixture";
+const toggleNames = ['Home', 'Desktop', 'Documents', 'WorkSpace', 'Office', 'Downloads'];
+const toggleNamesLevel2 = ['Desktop', 'Documents', 'Downloads'];
+const toggleNamesLevel3 = ['WorkSpace', 'Office'];
 
 test.describe.only("Check Box element tests", () => {
 
@@ -22,37 +25,42 @@ test.describe.only("Check Box element tests", () => {
         await checkboxPage.assertToggleExpanded('Home');
     });
 
-    test("Test Expand Desktop group in checkbox", async ({ checkboxPage }) => {
-        await checkboxPage.toggles['Home'].click();
-        await checkboxPage.toggles['Desktop'].click();
-        await checkboxPage.assertToggleExpanded('Desktop');
-    });
 
-    test("Test Expand Documents group in checkbox", async ({ checkboxPage }) => {
-        await checkboxPage.toggles['Home'].click();
-        await checkboxPage.toggles['Documents'].click();
-        await checkboxPage.assertToggleExpanded('Documents');
-    });
+    for (const toggleName of toggleNamesLevel2) {
+        test(`Expand ${toggleName} in checkbox`, async ({ checkboxPage }) => {
+            await checkboxPage.toggles['Home'].click();
+            await checkboxPage.toggles[toggleName].click();
+            await checkboxPage.assertToggleExpanded(toggleName);
+        });
+    }
 
-    test("Test Expand Downloads group in checkbox", async ({ checkboxPage }) => {
-        await checkboxPage.toggles['Home'].click();
-        await checkboxPage.toggles['Downloads'].click();
-        await checkboxPage.assertToggleExpanded('Downloads');
-    });
+    for (const toggleName of toggleNamesLevel3) {
+        test(`Expand ${toggleName} in checkbox`, async ({ checkboxPage }) => {
+            await checkboxPage.toggles['Home'].click();
+            await checkboxPage.toggles['Documents'].click();
+            await checkboxPage.toggles[toggleName].click();
+            await checkboxPage.assertToggleExpanded(toggleName);
+        });
+    }
 
-    test("Test Expand Office group in checkbox", async ({ checkboxPage }) => {
-        await checkboxPage.toggles['Home'].click();
-        await checkboxPage.toggles['Documents'].click();
-        await checkboxPage.toggles['Office'].click();
-        await checkboxPage.assertToggleExpanded('Office');
-    });
+    for (const toggleName of toggleNamesLevel2) {
+        test(`Check visibility checkbox in expand  ${toggleName}`, async ({ checkboxPage }) => {
+            await checkboxPage.toggles['Home'].click();
+            await checkboxPage.toggles[toggleName].click();
+            await checkboxPage.assertVisibilityCheckBoxes(toggleName,true);
+        });
+    }
 
-    test("Test Expand WorkSpace group in checkbox", async ({ checkboxPage }) => {
-        await checkboxPage.toggles['Home'].click();
-        await checkboxPage.toggles['Documents'].click();
-        await checkboxPage.toggles['WorkSpace'].click();
-        await checkboxPage.assertToggleExpanded('WorkSpace');
-    });
+    for (const toggleName of toggleNamesLevel3) {
+        test(`Check visibility checkbox in expand  ${toggleName}`, async ({ checkboxPage }) => {
+            await checkboxPage.toggles['Home'].click();
+            await checkboxPage.toggles['Documents'].click();
+            await checkboxPage.toggles[toggleName].click();
+            await checkboxPage.assertVisibilityCheckBoxes(toggleName,true);
+        });
+    }
+
+
 });
 
 test.describe.only("Check Box element tests", () => {
@@ -60,31 +68,19 @@ test.describe.only("Check Box element tests", () => {
         await checkboxPageExpandAll.collapseAllButton.click();
         await checkboxPageExpandAll.assertAllTogglesCollapsed();
     });
-    test("Collapse Home in checkbox by default", async ({ checkboxPageExpandAll }) => {
-        await checkboxPageExpandAll.toggles['Home'].click();
-        await checkboxPageExpandAll.assertToggleCollapsed('Home');
-    });
-    test("Collapse Desktop in checkbox by default", async ({ checkboxPageExpandAll }) => {
-        await checkboxPageExpandAll.toggles['Desktop'].click();
-        await checkboxPageExpandAll.assertToggleCollapsed('Desktop');
-    });
-    test("Collapse Documents in checkbox by default", async ({ checkboxPageExpandAll }) => {
-        await checkboxPageExpandAll.toggles['Documents'].click();
-        await checkboxPageExpandAll.assertToggleCollapsed('Documents');
-    });
-    test("Collapse Office in checkbox by default", async ({ checkboxPageExpandAll }) => {
-        await checkboxPageExpandAll.toggles['Office'].click();
-        await checkboxPageExpandAll.assertToggleCollapsed('Office');
-    });
-    test("Collapse WorkSpace in checkbox by default", async ({ checkboxPageExpandAll }) => {
-        await checkboxPageExpandAll.toggles['WorkSpace'].click();
-        await checkboxPageExpandAll.assertToggleCollapsed('WorkSpace');
-    });
-    test("Collapse Downloads in checkbox by default", async ({ checkboxPageExpandAll }) => {
-        await checkboxPageExpandAll.toggles['Downloads'].click();
-        await checkboxPageExpandAll.assertToggleCollapsed('Downloads');
-    });
 
 
+    for (const toggleName of toggleNames) {
+        test(`Check collapse status for ${toggleName}`, async ({ checkboxPageExpandAll }) => {
+            await checkboxPageExpandAll.toggles[toggleName].click();
+            await checkboxPageExpandAll.assertToggleCollapsed(toggleName);
+        });
+    }
 
+    for (const toggleName of toggleNames) {
+        test(`Check visibility checkbox in collapse ${toggleName}`, async ({ checkboxPageExpandAll }) => {
+            await checkboxPageExpandAll.toggles[toggleName].click();
+            await checkboxPageExpandAll.assertVisibilityCheckBoxes(toggleName,false);
+        });
+    }
 });

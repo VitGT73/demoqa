@@ -138,11 +138,6 @@ export class CheckboxExample {
 
   async assertCollapseAll() {
     await expect(this.homeToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-    // await expect(this.desktopToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-    // await expect(this.documentsToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-    // await expect(this.downloadsToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-    // await expect(this.workspaceToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-    // await expect(this.officeToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
   }
 
   async assertCollapseHome() {
