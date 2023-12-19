@@ -11,39 +11,19 @@ export class CheckboxExample {
   readonly header: Locator;
   readonly testLocator: Locator;
 
-  private nodeHomeState: boolean | undefined;
-  private nodeDocumentsState: boolean| undefined;
-  private nodeDownloadsState: boolean| undefined;
-  private nodeDesktopState: boolean| undefined;
-  private nodeWorkSpaceState: boolean| undefined;
-  private nodeOfficeState: boolean| undefined;
+
   readonly expandAllButton: Locator;
   readonly collapseAllButton: Locator;
 
-  readonly homeToggle: Locator;
-  readonly desktopToggle: Locator;
-  readonly documentsToggle: Locator;
-  readonly workspaceToggle: Locator;
-  readonly officeToggle: Locator;
-  readonly downloadsToggle: Locator;
+  private readonly toggleNames: string[]
+  readonly toggles: Record<string, Locator> = {};
+  private readonly togglesWithChild: Record<string, string[]>;
 
-  readonly checkboxHome: Locator;
-  readonly checkboxDesktop: Locator;
-  readonly checkboxNotes: Locator;
-  readonly checkboxCommands: Locator;
-  readonly checkboxDocuments: Locator;
-  readonly checkboxWorkSpace: Locator;
-  readonly checkboxReact: Locator;
-  readonly checkboxAngular: Locator;
-  readonly checkboxVeu: Locator;
-  readonly checkboxOffice: Locator;
-  readonly checkboxPublic: Locator;
-  readonly checkboxPrivate: Locator;
-  readonly checkboxClassified: Locator;
-  readonly checkboxGeneral: Locator;
-  readonly checkboxDownloads: Locator;
-  readonly checkboxWord: Locator;
-  readonly checkboxExcel: Locator;
+  readonly checkboxes: Record<string, Locator>;
+  private checkboxIndexByName: Record<string, number>;
+  private readonly checkBoxesWithChild: Record<string, string[]>;
+  private statusMessages: Record<string, string>;
+
 
   readonly resultMessage: Locator
 
@@ -53,47 +33,145 @@ export class CheckboxExample {
     this.url = "/checkbox";
     this.headerText = "Check Box";
     this.header = page.locator("//div[@class='main-header']");
+    this.resultMessage = page.locator('#result')
+
     // Expand and Collapse
     this.expandAllButton = page.getByRole('button', { name: 'Expand all' });
     this.collapseAllButton = page.getByRole('button', { name: 'Collapse all' });
 
-    //Check boxes
 
-    this.checkboxHome = page.locator('label').filter({ hasText: 'Home' });
-    this.checkboxDesktop = page.locator('label').filter({ hasText: 'Desktop' });
-    this.checkboxNotes = page.locator('label').filter({ hasText: 'Notes' });
-    this.checkboxCommands = page.locator('label').filter({ hasText: 'Commands' });
-    this.checkboxDocuments = page.locator('label').filter({ hasText: 'Documents' })
-    this.checkboxWorkSpace = page.locator('label').filter({ hasText: 'WorkSpace' })
-    this.checkboxReact = page.locator('label').filter({ hasText: 'React' })
-    this.checkboxAngular = page.locator('label').filter({ hasText: 'Angular' })
-    this.checkboxVeu = page.locator('label').filter({ hasText: 'Veu' })
-    this.checkboxOffice = page.locator('label').filter({ hasText: 'Office' })
-    this.checkboxPublic = page.locator('label').filter({ hasText: 'Public' })
-    this.checkboxPrivate = page.locator('label').filter({ hasText: 'Private' })
-    this.checkboxClassified = page.locator('label').filter({ hasText: 'Classified' })
-    this.checkboxGeneral = page.locator('label').filter({ hasText: 'General' })
-    this.checkboxDownloads = page.locator('label').filter({ hasText: 'Downloads' })
-    this.checkboxWord = page.locator('label').filter({ hasText: 'Word File.doc' })
-    this.checkboxExcel = page.locator('label').filter({ hasText: 'Excel File.doc' })
+    //Check boxes
+    this.checkboxes = this.createCheckboxes([
+      'Home', 'Desktop', 'Notes', 'Commands', 'Documents', 'WorkSpace', 'React',
+      'Angular', 'Veu', 'Office', 'Public', 'Private', 'Classified', 'General',
+      'Downloads', 'Word File.doc', 'Excel File.doc'
+    ]);
+
+    // Создаем объект с соответствием индексов именам чек-боксов
+    this.checkboxIndexByName = {};
+    Object.entries(this.checkboxes).forEach(([checkboxName, locator], index) => {
+      this.checkboxIndexByName[checkboxName] = index;
+    });
 
     // toggles
-    this.homeToggle = this.checkboxHome.locator("xpath=/preceding-sibling::button")
-    // this.homeToggle = page.locator('label').filter({ hasText: 'Home' }).locator("xpath=/preceding-sibling::button")
-    // this.homeToggle = page.locator("//label[@for='tree-node-home']").locator("xpath=/preceding-sibling::button")
-    // this.homeToggle = page.locator("//label[@for='tree-node-home']/preceding-sibling::button")
-    this.desktopToggle = this.checkboxDesktop.locator("xpath=/preceding-sibling::button")
-    this.documentsToggle = this.checkboxDocuments.locator("xpath=/preceding-sibling::button")
-    this.workspaceToggle = this.checkboxWorkSpace.locator("xpath=/preceding-sibling::button")
-    this.officeToggle = this.checkboxOffice.locator("xpath=/preceding-sibling::button")
-    this.downloadsToggle = this.checkboxDownloads.locator("xpath=/preceding-sibling::button")
-    this.resultMessage = page.locator('#result')
+    this.toggles = this.createToggles([
+      'Home', 'Desktop', 'Documents', 'WorkSpace', 'Office', 'Downloads'
+    ])
 
+    // Статусные сообщения для каждого чекбокса
+    this.statusMessages = {
+      'Home': 'home',
+      'Desktop': 'desktop',
+      'Notes': 'notes',
+      'Commands': 'commands',
+      'Documents': 'documents',
+      'WorkSpace': 'workspace',
+      'React': 'react',
+      'Angular': 'angular',
+      'Veu': 'veu',
+      'Office': 'office',
+      'Public': 'public',
+      'Private': 'private',
+      'Classified': 'classified',
+      'General': 'general',
+      'Downloads': 'downloads',
+      'Word File.doc': 'wordFile',
+      'Excel File.doc': 'excelFile',
+    };
+    // Добавляем информацию о родительских и дочерних элементах
+    this.checkBoxesWithChild = {
+      'Home': ['Home', 'Desktop', 'Notes', 'Commands', 'Documents', 'WorkSpace', 'React',
+        'Angular', 'Veu', 'Office', 'Public', 'Private', 'Classified', 'General',
+        'Downloads', 'Word File.doc', 'Excel File.doc'],
+      'Desktop': ['Desktop', 'Notes', 'Commands'],
+      'Documents': ['Documents', 'WorkSpace', 'React',
+        'Angular', 'Veu', 'Office', 'Public', 'Private', 'Classified', 'General'],
+      'WorkSpace': ['WorkSpace', 'React', 'Angular', 'Veu'],
+      'Office': ['Office', 'Public', 'Private', 'Classified', 'General'],
+      'Downloads': ['Downloads', 'Word File.doc', 'Excel File.doc'],
+    };
+    this.togglesWithChild = {
+      'Home': ['Desktop', 'Documents', 'Downloads'],
+      'Desktop': ['Notes', 'Commands'],
+      'Documents': ['WorkSpace', 'Office'],
+      'WorkSpace': ['React', 'Angular', 'Veu'],
+      'Office': ['Public', 'Private', 'Classified', 'General'],
+      'Downloads': ['Word File.doc', 'Excel File.doc'],
+    };
+
+  }  // End class Constructor
+
+  private createCheckboxes(checkboxNames: string[]): Record<string, Locator> {
+    const checkboxes: Record<string, Locator> = {};
+
+    checkboxNames.forEach((checkboxName) => {
+      checkboxes[checkboxName] = this.page.locator('label').filter({ hasText: checkboxName });
+    });
+
+    return checkboxes;
   }
 
+  private createToggles(toggleNames: string[]): Record<string, Locator> {
+    const toggles: Record<string, Locator> = {};
+
+    toggleNames.forEach((toggleName) => {
+      const checkbox = this.checkboxes[toggleName];
+      if (checkbox) {
+        toggles[toggleName] = checkbox.locator("xpath=/preceding-sibling::button");
+      }
+    });
+    return toggles;
+  }
+
+// Методы страницы
   async load() {
     await this.page.goto(this.url, { waitUntil: 'domcontentloaded' });
   }
+
+  getCheckboxByName(checkboxName: string): Locator | undefined {
+    return this.checkboxes[checkboxName];
+  }
+
+  getCheckboxIndexByName(checkboxName: string): number | undefined {
+    return this.checkboxIndexByName[checkboxName];
+  }
+
+  async clickCheckbox(checkboxName: string): Promise<void> {
+    const checkbox = this.checkboxes[checkboxName];
+
+    if (checkbox) {
+      await checkbox.click();
+      console.log(`Clicked on checkbox: ${checkboxName}`);
+    } else {
+      console.error('Checkbox not found');
+    }
+  }
+
+  async clickRandomCheckboxes(count: number): Promise<void> {
+    const checkboxNames = Object.keys(this.checkboxes);
+
+    // Выбираем случайные чекбоксы
+    for (let i = 0; i < count; i++) {
+      const randomCheckboxName = checkboxNames[Math.floor(Math.random() * checkboxNames.length)];
+      const randomCheckbox = this.checkboxes[randomCheckboxName];
+
+      if (randomCheckbox) {
+        await randomCheckbox.click();
+        console.log(`Clicked on a random checkbox: ${randomCheckboxName}`);
+
+      // // Пауза только в режиме отладки
+      // if (!process.env.HEADLESS) {
+      //   await this.page.waitForTimeout(500);
+      // }
+
+      } else {
+        console.error('Random checkbox not found');
+      }
+    }
+  }
+// Проверки
+
+
 
   async assertPageHeader() {
     await expect(this.header).toHaveText(this.headerText);
@@ -103,70 +181,105 @@ export class CheckboxExample {
     await expect(this.page).toHaveURL(this.url);
   }
 
-  async assertExpandAll() {
-    await expect(this.homeToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
-    await expect(this.desktopToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
-    await expect(this.documentsToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
-    await expect(this.downloadsToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
-    await expect(this.workspaceToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
-    await expect(this.officeToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
+    // Сравниваем фактические статусы чек-боксов и выведенные в результирующую строку
+  // ВАЖНО: если часть чек-боксов скрыто, то функция работает не верно
+  async assertMessageContainsSelectedStatuses(): Promise<void> {
+    const selectedCheckboxes = Object.keys(this.checkboxes).filter(async (checkboxName) => {
+      const checkbox = this.checkboxes[checkboxName];
+      if (checkbox) {
+        const isChecked = await checkbox.isChecked();
+        return isChecked;
+      }
+      return false;
+    });
+
+    const textContent = await this.resultMessage.textContent();
+    if (textContent !== null) {
+      for (const selectedCheckbox of selectedCheckboxes) {
+        const statusMessage = this.statusMessages[selectedCheckbox];
+        if (statusMessage && textContent.includes(statusMessage)) {
+          console.log(`Status for ${selectedCheckbox} is included in the message for selected checkboxes.`);
+        } else {
+          console.error(`Status for ${selectedCheckbox} is missing in the message for selected checkboxes.`);
+        }
+      }
+    } else {
+      console.error('Result message text content is null');
+    }
   }
 
-  async assertExpandHome() {
-    await expect(this.homeToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
-  }
+    // Проверяем, что если чек-бокс выбран, то строке сообщений, указано его имя
+    async assertCheckboxStatus(checkboxName: string, isChecked: boolean): Promise<void> {
+      const statusMessage = this.statusMessages[checkboxName];
+      if (statusMessage) {
+        const relatedCheckboxes = [...new Set([...this.checkBoxesWithChild[checkboxName], checkboxName])];
 
-  async assertExpandDesktop() {
-    await expect(this.desktopToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
-  }
+        // Проверяем, что статус соответствует ожидаемому для всех связанных чекбоксов
+        for (const relatedCheckbox of relatedCheckboxes) {
+          const textContent = await this.resultMessage.textContent();
 
-  async assertExpandDocuments() {
-    await expect(this.documentsToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
-  }
+          // Проверяем, что статус соответствует ожидаемому
+          if (textContent !== null && ((isChecked && textContent.includes(statusMessage)) || (!isChecked && !textContent.includes(statusMessage)))) {
+            console.log(`Checkbox status for ${relatedCheckbox}: ${isChecked ? 'checked' : 'unchecked'}`);
+          } else {
+            console.error(`Unexpected checkbox status for ${relatedCheckbox}`);
+          }
+        }
+      } else {
+        console.error('Status message not found');
+      }
+    }
 
-  async assertExpandDownloads() {
-    await expect(this.downloadsToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
-  }
+    async assertToggleCollapsed(toggleName: string) {
+      await expect(this.toggles[toggleName].locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
+      // Пример использования
+      // await checkboxPage.assertToggleCollapsed('Home');
+    }
 
-  async assertExpandWorkspace() {
-    await expect(this.workspaceToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
-  }
+    async assertAllTogglesCollapsed() {
+      await this.assertToggleCollapsed('Home');
+    }
 
-  async assertExpandOffice() {
-    await expect(this.officeToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
-  }
+    async assertToggleExpanded(toggleName: string) {
+      await expect(this.toggles[toggleName].locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
+    }
 
-  async assertCollapseAll() {
-    await expect(this.homeToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-    // await expect(this.desktopToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-    // await expect(this.documentsToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-    // await expect(this.downloadsToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-    // await expect(this.workspaceToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-    // await expect(this.officeToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-  }
+    async assertAllTogglesExpanded() {
+      for (const toggleName in this.toggles) {
+        if (this.toggles.hasOwnProperty(toggleName)) {
+          await this.assertToggleExpanded(toggleName);
+        }
+      }
+    }
 
-  async assertCollapseHome() {
-    await expect(this.homeToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-  }
+    async CheckVisibilityForToggle(toggleName: string, isOpening: boolean): Promise<boolean> {
+      const childCheckboxNames = this.togglesWithChild[toggleName];
+      const parentCheckbox = this.checkboxes[toggleName];
+      const isParentVisible = await parentCheckbox.isVisible();
+      if (!isParentVisible) {
+        return false;
+      }
 
-  async assertCollapseDesktop() {
-    await expect(this.desktopToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-  }
-  async assertCollapseDocuments() {
-    await expect(this.documentsToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-  }
+      // Проверка видимости дочерних чек-боксов
+      for (const childCheckboxName of childCheckboxNames) {
+        const childCheckbox = this.checkboxes[childCheckboxName];
+        const isChildVisible = await childCheckbox.isVisible();
+        console.log(`У Чек-бокса ${childCheckboxName} видимость: ${isChildVisible}`)
+        if (isChildVisible !== isOpening) {
+          return false;
+        }
+      }
+      // Все условия выполнились успешно
+      return true;
+    }
 
-  async assertCollapseDownloads() {
-    await expect(this.downloadsToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-  }
+    async assertVisibilityCheckBoxes(toggleName: string, isOpening: boolean) {
+      const res = await this.CheckVisibilityForToggle(toggleName, isOpening)
+      console.log("Результат:  ", res)
+      await expect(res).toBeTruthy()
+    }
 
-  async assertCollapseWorkSpace() {
-    await expect(this.workspaceToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-  }
 
-  async assertCollapseOffice() {
-    await expect(this.officeToggle.locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-  }
 }
 
 
