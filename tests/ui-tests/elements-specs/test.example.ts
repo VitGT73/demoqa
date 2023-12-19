@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { type Page, type Locator, expect  } from '@playwright/test';
 
 export class CheckboxPage {
   readonly page: Page;
@@ -9,10 +9,14 @@ export class CheckboxPage {
   readonly collapseAllButton: Locator;
   readonly resultMessage: Locator;
 
+  private readonly toggleNames: string[]
+  readonly toggles: Record<string, Locator> = {};
+
   readonly checkboxes: Record<string, Locator>;
   private checkboxIndexByName: Record<string, number>;
   private statusMessages: Record<string, string>;
-  private readonly parentChildMappings: Record<string, string[]>;
+  private readonly checkBoxesWithChild: Record<string, string[]>;
+  private readonly togglesWithChild: Record<string, string[]>;
 
   constructor(page: Page) {
     this.page = page;
@@ -31,11 +35,17 @@ export class CheckboxPage {
       'Downloads', 'Word File.doc', 'Excel File.doc'
     ]);
 
+    this.toggles = this.createToggles([
+      'Home', 'Desktop', 'Documents', 'WorkSpace', 'Office', 'Downloads'
+    ])
+
     // Создаем объект с соответствием индексов именам чек-боксов
     this.checkboxIndexByName = {};
     Object.entries(this.checkboxes).forEach(([checkboxName, locator], index) => {
       this.checkboxIndexByName[checkboxName] = index;
     });
+
+
 
     // Статусные сообщения для каждого чекбокса
     this.statusMessages = {
@@ -58,7 +68,7 @@ export class CheckboxPage {
       'Excel File.doc': 'excelFile',
     };
     // Добавляем информацию о родительских и дочерних элементах
-    this.parentChildMappings = {
+    this.checkBoxesWithChild = {
       'Home': ['Home', 'Desktop', 'Notes', 'Commands', 'Documents', 'WorkSpace', 'React',
         'Angular', 'Veu', 'Office', 'Public', 'Private', 'Classified', 'General',
         'Downloads', 'Word File.doc', 'Excel File.doc'],
@@ -68,6 +78,14 @@ export class CheckboxPage {
       'WorkSpace': ['WorkSpace', 'React', 'Angular', 'Veu'],
       'Office': ['Office', 'Public', 'Private', 'Classified', 'General'],
       'Downloads': ['Downloads', 'Word File.doc', 'Excel File.doc'],
+    };
+    this.togglesWithChild = {
+      'Home': ['Desktop', 'Documents', 'Downloads'],
+      'Desktop': ['Notes', 'Commands'],
+      'Documents': ['WorkSpace', 'Office'],
+      'WorkSpace': ['React', 'Angular', 'Veu'],
+      'Office': ['Public', 'Private', 'Classified', 'General'],
+      'Downloads': ['Word File.doc', 'Excel File.doc'],
     };
   }
 
@@ -80,6 +98,20 @@ export class CheckboxPage {
 
     return checkboxes;
   }
+
+  // Метод для создания toggles
+  private createToggles(toggleNames: string[]): Record<string, Locator> {
+    const toggles: Record<string, Locator> = {};
+
+    toggleNames.forEach((toggleName) => {
+      const checkbox = this.checkboxes[toggleName];
+      if (checkbox) {
+        toggles[toggleName] = checkbox.locator("xpath=/preceding-sibling::button");
+      }
+    });
+    return toggles;
+  }
+
 
   getCheckboxByName(checkboxName: string): Locator | undefined {
     return this.checkboxes[checkboxName];
@@ -100,10 +132,27 @@ export class CheckboxPage {
     }
   }
 
+  async clickRandomCheckboxes(count: number): Promise<void> {
+    const checkboxNames = Object.keys(this.checkboxes);
+
+    // Выбираем случайные чекбоксы
+    for (let i = 0; i < count; i++) {
+      const randomCheckboxName = checkboxNames[Math.floor(Math.random() * checkboxNames.length)];
+      const randomCheckbox = this.checkboxes[randomCheckboxName];
+
+      if (randomCheckbox) {
+        await randomCheckbox.click();
+        console.log(`Clicked on a random checkbox: ${randomCheckboxName}`);
+      } else {
+        console.error('Random checkbox not found');
+      }
+    }
+  }
+
   async assertCheckboxStatus(checkboxName: string, isChecked: boolean): Promise<void> {
     const statusMessage = this.statusMessages[checkboxName];
     if (statusMessage) {
-      const relatedCheckboxes = [...new Set([...this.parentChildMappings[checkboxName], checkboxName])];
+      const relatedCheckboxes = [...new Set([...this.checkBoxesWithChild[checkboxName], checkboxName])];
 
       // Проверяем, что статус соответствует ожидаемому для всех связанных чекбоксов
       for (const relatedCheckbox of relatedCheckboxes) {
@@ -120,72 +169,122 @@ export class CheckboxPage {
       console.error('Status message not found');
     }
   }
+  // Сравниваем фактические статусы чек-боксов и выведенные в результирующую строку
+  // ВАЖНО: если часть чек-боксов скрыто, то функция работает не верно
+  async assertMessageContainsSelectedStatuses(): Promise<void> {
+    const selectedCheckboxes = Object.keys(this.checkboxes).filter(async (checkboxName) => {
+      const checkbox = this.checkboxes[checkboxName];
+      if (checkbox) {
+        const isChecked = await checkbox.isChecked();
+        return isChecked;
+      }
+      return false;
+    });
 
-  // async clickRandomCheckboxes(count: number): Promise<void> {
-  //   const checkboxNames = Object.keys(this.checkboxes);
+    const textContent = await this.resultMessage.textContent();
+    if (textContent !== null) {
+      for (const selectedCheckbox of selectedCheckboxes) {
+        const statusMessage = this.statusMessages[selectedCheckbox];
+        if (statusMessage && textContent.includes(statusMessage)) {
+          console.log(`Status for ${selectedCheckbox} is included in the message for selected checkboxes.`);
+        } else {
+          console.error(`Status for ${selectedCheckbox} is missing in the message for selected checkboxes.`);
+        }
+      }
+    } else {
+      console.error('Result message text content is null');
+    }
+  }
 
-  //   // Выбираем случайные чекбоксы
-  //   for (let i = 0; i < count; i++) {
-  //     const randomCheckboxName = checkboxNames[Math.floor(Math.random() * checkboxNames.length)];
-  //     await this.clickCheckbox(randomCheckboxName);
-  //     await this.assertCheckboxStatus(randomCheckboxName, true);
-  //   }
-  // }
+  async assertDesktopToggleChildsVisible() {
+    console.error('Я внутри этой гребанной проверки')
+    await expect(this.checkboxes["Desktop"]).toBeVisible();
+    let text = await this.checkboxes["Desktop"].innerText()
+    console.log(text)
+    await expect(this.checkboxes["Notes"]).toBeVisible();
+    text = await this.checkboxes["Notes"].innerText()
+    console.log(text)
+    await expect(this.checkboxes["Commands"]).toBeVisible();
 
-  // async assertCheckboxStatuses(clickedCheckboxes: Record<string, number>): Promise<void> {
-  //   for (const [checkboxName, clickCount] of Object.entries(clickedCheckboxes)) {
-  //     const statusMessage = this.statusMessages[checkboxName];
+    text = await this.checkboxes["Commands"].innerText();
+    console.log(text)
+  }
 
-  //     if (statusMessage) {
-  //       const textContent = await this.resultMessage.textContent();
+  async checkVisibilityForToggle(toggleName: string, isOpening: boolean): Promise<boolean> {
+    const childCheckboxNames = this.togglesWithChild[toggleName];
+    if (!childCheckboxNames) {
+      console.error(`Toggle ${toggleName} not found in togglesWithChild`);
+      return false;
+    }
 
-  //       // Проверяем, что статус соответствует ожидаемому
-  //       if (textContent !== null && textContent.includes(statusMessage.repeat(clickCount))) {
-  //         console.log(`Checkbox status for ${checkboxName}: clicked ${clickCount} times`);
-  //       } else {
-  //         console.error(`Unexpected checkbox status for ${checkboxName}`);
-  //       }
-  //     } else {
-  //       console.error('Status message not found');
-  //     }
-  //   }
-  // }
+    const parentCheckbox = this.checkboxes[toggleName];
+    if (!parentCheckbox) {
+      console.error(`Checkbox ${toggleName} not found`);
+      return false;
+    }
 
+    const isParentVisible = await parentCheckbox.isVisible();
 
-  // async clickRandomCheckboxes(count: number): Promise<Record<string, number>> {
-  //   const clickedCheckboxes: Record<string, number> = {};
-  //   const checkboxNames = Object.keys(this.checkboxes);
+    if (isOpening) {
+      // Если открываем, все должны быть видимы
+      if (!isParentVisible) {
+        console.error(`Checkbox ${toggleName} should be visible when opening toggle`);
+        return false;
+      }
+    } else {
+      // Если закрываем, родительский видимый, дочерние скрыты
+      if (!isParentVisible) {
+        console.error(`Checkbox ${toggleName} should be visible when closing toggle`);
+        return false;
+      }
+    }
 
-  //   // Выбираем случайные чекбоксы
-  //   for (let i = 0; i < count; i++) {
-  //     const randomCheckboxName = checkboxNames[Math.floor(Math.random() * checkboxNames.length)];
-  //     const randomCheckbox = this.checkboxes[randomCheckboxName];
+    // Проверка видимости дочерних чек-боксов
+    for (const childCheckboxName of childCheckboxNames) {
+      const childCheckbox = this.checkboxes[childCheckboxName];
+      if (!childCheckbox) {
+        console.error(`Checkbox ${childCheckboxName} not found`);
+        return false;
+      }
+      console.log(`Проверка видимости для ${childCheckboxName}`)
+      const isChildVisible = await childCheckbox.isVisible();
+      const shouldBeVisible = isOpening ? isChildVisible : !isChildVisible;
 
-  //     if (randomCheckbox) {
-  //       await randomCheckbox.click();
+      if (!shouldBeVisible) {
+        console.error(`Checkbox ${childCheckboxName} should be ${isOpening ? 'visible' : 'hidden'} when ${isOpening ? 'opening' : 'closing'} toggle`);
+        return false;
+      }
+    }
 
-  //       // Обновляем информацию о том, сколько раз каждый чек-бокс был выбран
-  //       clickedCheckboxes[randomCheckboxName] = (clickedCheckboxes[randomCheckboxName] || 0) + 1;
+    // Все условия выполнились успешно
+    return true;
+  }
 
-  //       console.log(`Clicked on a random checkbox: ${randomCheckboxName}`);
-  //     } else {
-  //       console.error('Random checkbox not found');
-  //     }
-  //   }
+  async myCheckVisibilityForToggle(toggleName: string, isOpening: boolean): Promise<boolean> {
+    const childCheckboxNames = this.togglesWithChild[toggleName];
+    const parentCheckbox = this.checkboxes[toggleName];
+    const isParentVisible = await parentCheckbox.isVisible();
+    if (!isParentVisible) {
+      return false;
+    }
 
-  // Возвращаем объект с информацией о выбранных чек-боксах и их количестве
-  //   return clickedCheckboxes;
-  // }
+    // Проверка видимости дочерних чек-боксов
+    for (const childCheckboxName of childCheckboxNames) {
+      const childCheckbox = this.checkboxes[childCheckboxName];
+      const isChildVisible = await childCheckbox.isVisible();
+      console.log(`У Чек-бокса ${childCheckboxName} видимость: ${isChildVisible}`)
+      if (isChildVisible !== isOpening) {
+        return false;
+      }
+    }
+  // Все условия выполнились успешно
+  return true;
+  }
+
+  async assertVisibilityCheckBoxes(toggleName: string, isOpening: boolean){
+    const res = await this.myCheckVisibilityForToggle(toggleName, isOpening)
+    console.log("Результат:  ", res)
+    await expect(res).toBeTruthy()
+  }
+
 }
-
-
-// У некоторых чек-боксов есть дочерние элементы. И при выборе родительского элемента, дочерние тоже выбираются, тоже самое происходит при отмене выделения. Давай учтем это при проверке assertCheckboxStatus
-// 'Home':{'Home', 'Desktop', 'Notes', 'Commands', 'Documents', 'WorkSpace', 'React',
-// 'Angular', 'Veu', 'Office', 'Public', 'Private', 'Classified', 'General',
-// 'Downloads', 'Word File.doc', 'Excel File.doc'}
-// 'Desktop': {'Desktop', 'Notes', 'Commands'}
-// 'Documents':{'Documents', 'WorkSpace', 'React',
-// 'Angular', 'Veu', 'Office', 'Public', 'Private', 'Classified', 'General'}
-// 'WorkSpace':{'WorkSpace', 'React','Angular', 'Veu'}
-// 'Office':{'Office', 'Public', 'Private', 'Classified', 'General'}
-// 'Downloads':{'Downloads', 'Word File.doc', 'Excel File.doc'}
