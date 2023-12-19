@@ -15,10 +15,11 @@ export class CheckboxExample {
   readonly expandAllButton: Locator;
   readonly collapseAllButton: Locator;
 
-  private readonly toggleNames: string[]
+  public toggleNames: string[]
   readonly toggles: Record<string, Locator> = {};
   private readonly togglesWithChild: Record<string, string[]>;
 
+  public checkboxNames: string[];
   readonly checkboxes: Record<string, Locator>;
   private checkboxIndexByName: Record<string, number>;
   private readonly checkBoxesWithChild: Record<string, string[]>;
@@ -41,11 +42,12 @@ export class CheckboxExample {
 
 
     //Check boxes
-    this.checkboxes = this.createCheckboxes([
+    this.checkboxNames = [
       'Home', 'Desktop', 'Notes', 'Commands', 'Documents', 'WorkSpace', 'React',
       'Angular', 'Veu', 'Office', 'Public', 'Private', 'Classified', 'General',
       'Downloads', 'Word File.doc', 'Excel File.doc'
-    ]);
+    ]
+    this.checkboxes = this.createCheckboxes(this.checkboxNames);
 
     // Создаем объект с соответствием индексов именам чек-боксов
     this.checkboxIndexByName = {};
@@ -54,9 +56,10 @@ export class CheckboxExample {
     });
 
     // toggles
-    this.toggles = this.createToggles([
+    this.toggleNames = [
       'Home', 'Desktop', 'Documents', 'WorkSpace', 'Office', 'Downloads'
-    ])
+    ]
+    this.toggles = this.createToggles(this.toggleNames)
 
     // Статусные сообщения для каждого чекбокса
     this.statusMessages = {
@@ -90,6 +93,7 @@ export class CheckboxExample {
       'Office': ['Office', 'Public', 'Private', 'Classified', 'General'],
       'Downloads': ['Downloads', 'Word File.doc', 'Excel File.doc'],
     };
+
     this.togglesWithChild = {
       'Home': ['Desktop', 'Documents', 'Downloads'],
       'Desktop': ['Notes', 'Commands'],
@@ -123,7 +127,7 @@ export class CheckboxExample {
     return toggles;
   }
 
-// Методы страницы
+  // Методы страницы
   async load() {
     await this.page.goto(this.url, { waitUntil: 'domcontentloaded' });
   }
@@ -141,7 +145,7 @@ export class CheckboxExample {
 
     if (checkbox) {
       await checkbox.click();
-      console.log(`Clicked on checkbox: ${checkboxName}`);
+      // console.log(`Clicked on checkbox: ${checkboxName}`);
     } else {
       console.error('Checkbox not found');
     }
@@ -157,19 +161,20 @@ export class CheckboxExample {
 
       if (randomCheckbox) {
         await randomCheckbox.click();
-        console.log(`Clicked on a random checkbox: ${randomCheckboxName}`);
+        // console.log(`Clicked on a random checkbox: ${randomCheckboxName}`);
 
-      // // Пауза только в режиме отладки
-      // if (!process.env.HEADLESS) {
-      //   await this.page.waitForTimeout(500);
-      // }
+        // Пауза только в режиме отладки
+        if (!process.env.HEADLESS) {
+          await this.page.waitForTimeout(1500);
+        }
+        // console.log(!process.env.HEADLESS)
 
       } else {
         console.error('Random checkbox not found');
       }
     }
   }
-// Проверки
+  // Проверки
   async assertPageHeader() {
     await expect(this.header).toHaveText(this.headerText);
   }
@@ -178,54 +183,94 @@ export class CheckboxExample {
     await expect(this.page).toHaveURL(this.url);
   }
 
-    // Сравниваем фактические статусы чек-боксов и выведенные в результирующую строку
+  //   Сравниваем фактические статусы чек-боксов и выведенные в результирующую строку
   // ВАЖНО: если часть чек-боксов скрыто, то функция работает не верно
-  async assertMessageContainsSelectedStatuses(): Promise<void> {
-    const selectedCheckboxes = Object.keys(this.checkboxes).filter(async (checkboxName) => {
-      const checkbox = this.checkboxes[checkboxName];
-      if (checkbox) {
-        const isChecked = await checkbox.isChecked();
-        return isChecked;
-      }
-      return false;
-    });
+  // async assertMessageContainsSelectedStatuses(): Promise<void> {
+  //   const selectedCheckboxes = Object.keys(this.checkboxes).filter(async (checkboxName) => {
+  //     const checkbox = this.checkboxes[checkboxName];
+  //     if (checkbox) {
+  //       const isChecked = await checkbox.isChecked();
+  //       return isChecked;
+  //     }
+  //     return false;
+  //   });
 
-    const textContent = await this.resultMessage.textContent();
-    if (textContent !== null) {
-      for (const selectedCheckbox of selectedCheckboxes) {
-        const statusMessage = this.statusMessages[selectedCheckbox];
-        if (statusMessage && textContent.includes(statusMessage)) {
-          console.log(`Status for ${selectedCheckbox} is included in the message for selected checkboxes.`);
-        } else {
-          console.error(`Status for ${selectedCheckbox} is missing in the message for selected checkboxes.`);
+  //   const textContent = await this.resultMessage.textContent();
+  //   if (textContent !== null) {
+  //     for (const selectedCheckbox of selectedCheckboxes) {
+  //       const statusMessage = this.statusMessages[selectedCheckbox];
+  //       if (statusMessage && textContent.includes(statusMessage)) {
+  //         console.log(`Status for ${selectedCheckbox} is included in the message for selected checkboxes.`);
+  //       } else {
+  //         console.error(`Status for ${selectedCheckbox} is missing in the message for selected checkboxes.`);
+  //       }
+  //     }
+  //   } else {
+  //     console.error('Result message text content is null');
+  //   }
+  // }
+
+
+  async checkForMessageCorrelatesWithStatuses(): Promise<boolean> {
+    const allCheckboxes = Object.entries(this.checkboxes);
+    const visibleCheckboxes = await this.page.locator('//span[@class="rct-title"]').allTextContents()
+    for (const [checkboxName, checkbox] of allCheckboxes) {
+      if ( visibleCheckboxes.includes(checkboxName)) {
+        const isChecked = await checkbox.isChecked();
+        if (isChecked) {
+          const textContent = await this.resultMessage.textContent();
+          const statusMessage = this.statusMessages[checkboxName];
+
+          if (statusMessage && textContent !== null && textContent.includes(statusMessage)) {
+            // console.log(`Status for ${checkboxName} is included in the message for selected checkboxes.`);
+          } else {
+            // console.error(`Status for ${checkboxName} is missing in the message for selected checkboxes.`);
+            return false
+          }
         }
       }
-    } else {
-      console.error('Result message text content is null');
     }
+    return true;
+  }
+  async assertMessageContainsSelectedStatuses (){
+    const checkStatus = await this.checkForMessageCorrelatesWithStatuses();
+    await expect(checkStatus).toBeTruthy();
   }
 
+
+
+
+
     // Проверяем, что если чек-бокс выбран, то строке сообщений, указано его имя
-    async assertCheckboxStatus(checkboxName: string, isChecked: boolean): Promise<void> {
+    async checkCheckboxStatus(checkboxName: string, isChecked: boolean): Promise < boolean > {
       const statusMessage = this.statusMessages[checkboxName];
-      if (statusMessage) {
-        const relatedCheckboxes = [...new Set([...this.checkBoxesWithChild[checkboxName], checkboxName])];
+      if(statusMessage) {
+        const relatedCheckboxes = this.checkBoxesWithChild[checkboxName] || [checkboxName];
 
         // Проверяем, что статус соответствует ожидаемому для всех связанных чекбоксов
         for (const relatedCheckbox of relatedCheckboxes) {
           const textContent = await this.resultMessage.textContent();
 
           // Проверяем, что статус соответствует ожидаемому
-          if (textContent !== null && ((isChecked && textContent.includes(statusMessage)) || (!isChecked && !textContent.includes(statusMessage)))) {
-            console.log(`Checkbox status for ${relatedCheckbox}: ${isChecked ? 'checked' : 'unchecked'}`);
-          } else {
+          if (!(textContent !== null && ((isChecked && textContent.includes(statusMessage)) || (!isChecked && !textContent.includes(statusMessage))))) {
             console.error(`Unexpected checkbox status for ${relatedCheckbox}`);
+            return false; // If any check fails, return false
           }
         }
+
+        // console.log(`Checkbox status for ${relatedCheckboxes.join(', ')}: ${isChecked ? 'checked' : 'unchecked'}`);
+        return true; // All checks passed
       } else {
         console.error('Status message not found');
+        return false; // Return false if status message not found
       }
     }
+    async assertCheckboxStatus(checkboxName: string, isChecked: boolean){
+      const checkStatus = await this.checkCheckboxStatus(checkboxName, isChecked);
+      await expect(checkStatus).toBeTruthy();
+
+    }
+
 
     async assertToggleCollapsed(toggleName: string) {
       await expect(this.toggles[toggleName].locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
@@ -249,16 +294,16 @@ export class CheckboxExample {
       }
     }
 
-    async CheckVisibilityForToggle(toggleName: string, isOpening: boolean): Promise<boolean> {
+    async CheckVisibilityForToggle(toggleName: string, isOpening: boolean): Promise < boolean > {
       const childCheckboxNames = this.togglesWithChild[toggleName];
       const parentCheckbox = this.checkboxes[toggleName];
       const isParentVisible = await parentCheckbox.isVisible();
-      if (!isParentVisible) {
+      if(!isParentVisible) {
         return false;
       }
 
       // Проверка видимости дочерних чек-боксов
-      for (const childCheckboxName of childCheckboxNames) {
+      for(const childCheckboxName of childCheckboxNames) {
         const childCheckbox = this.checkboxes[childCheckboxName];
         const isChildVisible = await childCheckbox.isVisible();
         // console.log(`У Чек-бокса ${childCheckboxName} видимость: ${isChildVisible}`)
@@ -277,7 +322,7 @@ export class CheckboxExample {
     }
 
 
-}
+  }
 
 
 export default CheckboxExample
