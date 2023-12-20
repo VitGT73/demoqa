@@ -52,9 +52,9 @@ export const test = base.extend<DemoqaPages>({
   },
 
   widgetsPage: async ({ page }, use) => {
-    const booksPage = new WidgetsPage(page);
-    await booksPage.load();
-    await use(booksPage);
+    const widgetsPage = new WidgetsPage(page);
+    await widgetsPage.load();
+    await use(widgetsPage);
   },
 
   interactionsPage: async ({ page }, use) => {

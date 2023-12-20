@@ -51,25 +51,25 @@ export const test = base.extend<ElementsPages>({
   },
 
   webTablesPage: async ({ page }, use) => {
-    const webTablesPage = new CheckboxExample(page);
+    const webTablesPage = new WebTablesExample(page);
     await webTablesPage.load();
     await use(webTablesPage);
   },
 
   buttonPage: async ({ page }, use) => {
-    const buttonPage = new CheckboxExample(page);
+    const buttonPage = new ButtonExample(page);
     await buttonPage.load();
     await use(buttonPage);
   },
 
   linksPage: async ({ page }, use) => {
-    const linksPage = new CheckboxExample(page);
+    const linksPage = new LinksExample(page);
     await linksPage.load();
     await use(linksPage);
   },
 
   brokenLinksPage: async ({ page }, use) => {
-    const brokenLinksPage = new CheckboxExample(page);
+    const brokenLinksPage = new BrokenLinksExample(page);
     await brokenLinksPage.load();
     await use(brokenLinksPage);
   },
@@ -81,7 +81,7 @@ export const test = base.extend<ElementsPages>({
   },
 
   dynamicPropertiesPage: async ({ page }, use) => {
-    const dynamicPropertiesPage = new CheckboxExample(page);
+    const dynamicPropertiesPage = new DynamicPropertiesExample(page);
     await dynamicPropertiesPage.load();
     await use(dynamicPropertiesPage);
   },

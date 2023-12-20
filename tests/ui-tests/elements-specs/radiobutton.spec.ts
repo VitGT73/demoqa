@@ -4,8 +4,7 @@ import { test, expect } from "../../fixtures/elements.fixture";
 // let data = new TextboxRandomData();
 
 // test.describe.configure({ mode: 'serial' });
-test.describe("Radio button tests", () => {
-
+test.describe ("Radio button tests", () => {
     // test.beforeAll( async ()=>{
     //     let data = new TextboxRandomData;
     // })
@@ -22,8 +21,9 @@ test.describe("Radio button tests", () => {
     test("Check message after click 'Impressive' radio", async ({ radioButtonPage }) => {
         await radioButtonPage.radioButtons['Impressive'].click();
         await radioButtonPage.assertPresenceInSuccessMessage('Impressive', true)
-
     });
+
+
     test("Check message after click 'No' radio", async ({ radioButtonPage }) => {
         await radioButtonPage.radioButtons['Impressive'].click();
         await radioButtonPage.radioButtons['No'].click({ force: true });
@@ -41,6 +41,21 @@ test.describe("Radio button tests", () => {
         await radioButtonPage.radioButtons['Impressive'].click();
         await radioButtonPage.assertRadioIsChecked('Impressive', true);
 
+    });
+
+
+    test("Click 'Yes'. Validate uncheck other radio", async ({ radioButtonPage }) => {
+        await radioButtonPage.radioButtons['Impressive'].click();
+        await radioButtonPage.radioButtons['Yes'].click();
+        await radioButtonPage.assertRadioIsChecked('Yes', true)
+        await radioButtonPage.assertRadioIsChecked('Impressive', false);
+    });
+
+    test("Click 'Impressive'. Validate uncheck other radio radio", async ({ radioButtonPage }) => {
+        await radioButtonPage.radioButtons['Yes'].click();
+        await radioButtonPage.radioButtons['Impressive'].click();
+        await radioButtonPage.assertRadioIsChecked('Impressive', true);
+        await radioButtonPage.assertRadioIsChecked('Yes', false)
     });
 
     test("Validate checked 'No' radio", async ({ radioButtonPage }) => {
