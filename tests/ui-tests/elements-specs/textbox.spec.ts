@@ -1,8 +1,8 @@
-import { test, expect } from "../../fixtures/elements.fixture";
+import { test } from "../../fixtures/elements.fixture";
 // import {TextBoxExample} from '../../objects/examples/elements/textbox.example'
-import { TextboxRandomData } from '../../testdata/textbox.data'
+import { TextboxRandomData } from '../../testdata/elements/textbox.data';
 
-let data = new TextboxRandomData;
+let data = new TextboxRandomData();
 // const fullName = data.getFullName();
 // const eMail = data.getEmail(true);
 // const currentAddress = data.getCurrentAddress();

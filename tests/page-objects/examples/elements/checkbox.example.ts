@@ -215,7 +215,7 @@ export class CheckboxExample {
     const allCheckboxes = Object.entries(this.checkboxes);
     const visibleCheckboxes = await this.page.locator('//span[@class="rct-title"]').allTextContents()
     for (const [checkboxName, checkbox] of allCheckboxes) {
-      if ( visibleCheckboxes.includes(checkboxName)) {
+      if (visibleCheckboxes.includes(checkboxName)) {
         const isChecked = await checkbox.isChecked();
         if (isChecked) {
           const textContent = await this.resultMessage.textContent();
@@ -232,7 +232,7 @@ export class CheckboxExample {
     }
     return true;
   }
-  async assertMessageContainsSelectedStatuses (){
+  async assertMessageContainsSelectedStatuses() {
     const checkStatus = await this.checkForMessageCorrelatesWithStatuses();
     await expect(checkStatus).toBeTruthy();
   }
@@ -241,88 +241,103 @@ export class CheckboxExample {
 
 
 
-    // Проверяем, что если чек-бокс выбран, то строке сообщений, указано его имя
-    async checkCheckboxStatus(checkboxName: string, isChecked: boolean): Promise < boolean > {
-      const statusMessage = this.statusMessages[checkboxName];
-      if(statusMessage) {
-        const relatedCheckboxes = this.checkBoxesWithChild[checkboxName] || [checkboxName];
+  // Проверяем, что если чек-бокс выбран, то строке сообщений, указано его имя
+  async checkCheckboxStatus(checkboxName: string, isChecked: boolean): Promise<boolean> {
+    const statusMessage = this.statusMessages[checkboxName];
+    const messagesIsVisible = await this.resultMessage.isVisible({ timeout: 1000 });
+    if (statusMessage && messagesIsVisible) {
+      const relatedCheckboxes = this.checkBoxesWithChild[checkboxName] || [checkboxName];
 
-        // Проверяем, что статус соответствует ожидаемому для всех связанных чекбоксов
-        for (const relatedCheckbox of relatedCheckboxes) {
-          const textContent = await this.resultMessage.textContent();
+      // Проверяем, что статус соответствует ожидаемому для всех связанных чекбоксов
+      for (const relatedCheckbox of relatedCheckboxes) {
+        const textContent = await this.resultMessage.textContent();
 
-          // Проверяем, что статус соответствует ожидаемому
-          if (!(textContent !== null && ((isChecked && textContent.includes(statusMessage)) || (!isChecked && !textContent.includes(statusMessage))))) {
-            console.error(`Unexpected checkbox status for ${relatedCheckbox}`);
-            return false; // If any check fails, return false
-          }
-        }
-
-        // console.log(`Checkbox status for ${relatedCheckboxes.join(', ')}: ${isChecked ? 'checked' : 'unchecked'}`);
-        return true; // All checks passed
-      } else {
-        console.error('Status message not found');
-        return false; // Return false if status message not found
-      }
-    }
-    async assertCheckboxStatus(checkboxName: string, isChecked: boolean){
-      const checkStatus = await this.checkCheckboxStatus(checkboxName, isChecked);
-      await expect(checkStatus).toBeTruthy();
-
-    }
-
-
-    async assertToggleCollapsed(toggleName: string) {
-      await expect(this.toggles[toggleName].locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
-      // Пример использования
-      // await checkboxPage.assertToggleCollapsed('Home');
-    }
-
-    async assertAllTogglesCollapsed() {
-      await this.assertToggleCollapsed('Home');
-    }
-
-    async assertToggleExpanded(toggleName: string) {
-      await expect(this.toggles[toggleName].locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
-    }
-
-    async assertAllTogglesExpanded() {
-      for (const toggleName in this.toggles) {
-        if (this.toggles.hasOwnProperty(toggleName)) {
-          await this.assertToggleExpanded(toggleName);
+        // Проверяем, что статус соответствует ожидаемому
+        if (!(textContent !== null && ((isChecked && textContent.includes(statusMessage)) || (!isChecked && !textContent.includes(statusMessage))))) {
+          console.error(`Unexpected checkbox status for ${relatedCheckbox}`);
+          return false; // If any check fails, return false
         }
       }
+
+      // console.log(`Checkbox status for ${relatedCheckboxes.join(', ')}: ${isChecked ? 'checked' : 'unchecked'}`);
+      return true; // All checks passed
+    } else if (isChecked) {
+      // console.error('Status message not found');
+      return false; // Если чек-бокс выбран, но строка статуса отсутствует
+    } else {
+      // console.error('Status message not found');
+      return true; // Если строка статуса отсутствует, но чек-бок не выбран
     }
+  }
 
-    async CheckVisibilityForToggle(toggleName: string, isOpening: boolean): Promise < boolean > {
-      const childCheckboxNames = this.togglesWithChild[toggleName];
-      const parentCheckbox = this.checkboxes[toggleName];
-      const isParentVisible = await parentCheckbox.isVisible();
-      if(!isParentVisible) {
-        return false;
-      }
-
-      // Проверка видимости дочерних чек-боксов
-      for(const childCheckboxName of childCheckboxNames) {
-        const childCheckbox = this.checkboxes[childCheckboxName];
-        const isChildVisible = await childCheckbox.isVisible();
-        // console.log(`У Чек-бокса ${childCheckboxName} видимость: ${isChildVisible}`)
-        if (isChildVisible !== isOpening) {
-          return false;
-        }
-      }
-      // Все условия выполнились успешно
-      return true;
-    }
-
-    async assertVisibilityCheckBoxes(toggleName: string, isOpening: boolean) {
-      const res = await this.CheckVisibilityForToggle(toggleName, isOpening)
-      // console.log("Результат:  ", res)
-      await expect(res).toBeTruthy()
-    }
-
+  async assertCheckboxStatus(checkboxName: string, isChecked: boolean) {
+    const checkStatus = await this.checkCheckboxStatus(checkboxName, isChecked);
+    await expect(checkStatus).toBeTruthy();
 
   }
+
+
+  async assertToggleCollapsed(toggleName: string) {
+    await expect(this.toggles[toggleName].locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-collapsed/)
+    // Пример использования
+    // await checkboxPage.assertToggleCollapsed('Home');
+  }
+
+  async assertAllTogglesCollapsed() {
+    await this.assertToggleCollapsed('Home');
+  }
+
+  async assertToggleExpanded(toggleName: string) {
+    await expect(this.toggles[toggleName].locator('xpath=..').locator('xpath=..')).toHaveClass(/rct-node-expanded/)
+  }
+
+  async assertAllTogglesExpanded() {
+    for (const toggleName in this.toggles) {
+      if (this.toggles.hasOwnProperty(toggleName)) {
+        await this.assertToggleExpanded(toggleName);
+      }
+    }
+  }
+
+  async assertChecked(checkboxName: string, isOpening: boolean) {
+    const res = await this.checkboxes[checkboxName].isChecked();
+    if (isOpening) {
+      await expect(res).toBeTruthy()
+    } else {
+      await expect(res).toBeFalsy()
+    }
+
+  }
+
+  async CheckVisibilityForToggle(toggleName: string, isOpening: boolean): Promise<boolean> {
+    const childCheckboxNames = this.togglesWithChild[toggleName];
+    const parentCheckbox = this.checkboxes[toggleName];
+    const isParentVisible = await parentCheckbox.isVisible();
+    if (!isParentVisible) {
+      return false;
+    }
+
+    // Проверка видимости дочерних чек-боксов
+    for (const childCheckboxName of childCheckboxNames) {
+      const childCheckbox = this.checkboxes[childCheckboxName];
+      const isChildVisible = await childCheckbox.isVisible();
+      // console.log(`У Чек-бокса ${childCheckboxName} видимость: ${isChildVisible}`)
+      if (isChildVisible !== isOpening) {
+        return false;
+      }
+    }
+    // Все условия выполнились успешно
+    return true;
+  }
+
+  async assertVisibilityCheckBoxes(toggleName: string, isOpening: boolean) {
+    const res = await this.CheckVisibilityForToggle(toggleName, isOpening)
+    // console.log("Результат:  ", res)
+    await expect(res).toBeTruthy()
+  }
+
+
+}
 
 
 export default CheckboxExample

@@ -12,7 +12,7 @@ import { DynamicPropertiesExample } from '../page-objects/examples/elements/dyna
 type ElementsPages = {
   textBoxPage: TextBoxExample;
   checkboxPage: CheckboxExample;
-  checkboxPageExpandAll: CheckboxExample
+  // checkboxPageExpandAll: CheckboxExample;
   radioButtonPage: RadioButtonExample;
   webTablesPage: WebTablesExample;
   buttonPage: ButtonExample;
@@ -37,12 +37,12 @@ export const test = base.extend<ElementsPages>({
     await use(checkboxPage);
   },
 
-  checkboxPageExpandAll: async ({ page }, use) => {
-    const checkboxPage = new CheckboxExample(page);
-    await checkboxPage.load();
-    await checkboxPage.expandAllButton.click();
-    await use(checkboxPage);
-  },
+  // checkboxPageExpandAll: async ({ page }, use) => {
+  //   const checkboxPage = new CheckboxExample(page);
+  //   await checkboxPage.load();
+  //   await checkboxPage.expandAllButton.click();
+  //   await use(checkboxPage);
+  // },
 
   radioButtonPage: async ({ page }, use) => {
     const radioButtonPage = new RadioButtonExample(page);

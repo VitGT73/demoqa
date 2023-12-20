@@ -1,6 +1,6 @@
-import { TextBoxInterface } from '../interfaces/textbox.interface'
+import { TextBoxInterface } from '../../interfaces/textbox.interface';
 
-import { fakerRU as faker } from '@faker-js/faker'
+import { fakerRU as faker } from '@faker-js/faker';
 
 export class TextboxRandomData {
 
