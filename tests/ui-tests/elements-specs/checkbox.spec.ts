@@ -103,7 +103,7 @@ test.describe("Collapse tests", () => {
 });
 
 test.describe("Check elements tests", () => {
-    // test.describe.configure({ mode: 'serial' });
+
     test.beforeEach('Expand All',async({checkboxPage})=>{
         await checkboxPage.expandAllButton.click();
     });

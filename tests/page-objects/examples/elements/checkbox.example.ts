@@ -16,7 +16,7 @@ export class CheckboxExample {
   readonly collapseAllButton: Locator;
 
   public toggleNames: string[]
-  readonly toggles: Record<string, Locator> = {};
+  readonly toggles: Record<string, Locator>;
   private readonly togglesWithChild: Record<string, string[]>;
 
   public checkboxNames: string[];
