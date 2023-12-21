@@ -2,15 +2,28 @@
 
 Use @playwright/test to create multiple independent test scenarios, and leverage the power of web-first assertions.
 
-_TOC_
+## Table of Contents
 
-# dsadas
-# sdsadasd
-### sdsdsa
-### sdsadsa
+- [Quick start from a template](#quick-start-from-a-template)
+  - [Table of Contents](#table-of-contents)
+    - [Playwright Test example with multiple test cases](#playwright-test-example-with-multiple-test-cases)
+    - [Wait for an element to become visible](#wait-for-an-element-to-become-visible)
+    - [Visual regression testing with snapshots](#visual-regression-testing-with-snapshots)
+    - [Wait for a new page to load and screenshot it](#wait-for-a-new-page-to-load-and-screenshot-it)
+    - [Emulate a mobile device](#emulate-a-mobile-device)
+    - [Interact with form elements](#interact-with-form-elements)
+    - [Block unnecessary requests](#block-unnecessary-requests)
+    - [Read and manipulate cookies](#read-and-manipulate-cookies)
+    - [Evaluate performance metrics](#evaluate-performance-metrics)
+    - [Take screenshots in multiple screen dimensions](#take-screenshots-in-multiple-screen-dimensions)
+    - [Throttle the browser network](#throttle-the-browser-network)
+    - [Interact with iframes](#interact-with-iframes)
+    - [Handle opened pages and tabs](#handle-opened-pages-and-tabs)
+    - [Dismiss optional popups](#dismiss-optional-popups)
 
 
-## adsdas
+
+
 
 
 ### Playwright Test example with multiple test cases
@@ -581,11 +594,5 @@ test('dismiss optional popups', async ({ page }) => {
     path: 'screenshot.png',
   })
 })
-
-```
-
-### Playwright Test example with multiple test cases
-
-```typescript
 
 ```
