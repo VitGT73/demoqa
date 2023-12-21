@@ -32,7 +32,7 @@ export default defineConfig({
     trace: 'on-first-retry',
 
     // По умолчанию testIdAttribute: 'data-testid', но я поменял на 'id', на проде так делать нельзя
-    testIdAttribute: 'id'
+    testIdAttribute: 'id',
 
   },
 

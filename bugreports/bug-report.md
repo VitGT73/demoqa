@@ -9,7 +9,11 @@ sudo chown vit:vit webtable.jpg
 ```
 chmod 664 webtable.jpg
 ```
+### General
 
+Разные регулярные выражения для проверки поля e-mail:
+На странице [TextBox](https://demoqa.com/text-box) = ```^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$```
+На странице [Web Tables](https://demoqa.com/webtables) = ```^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$```
 
 ### Elements
 **[Text Box](https://demoqa.com/text-box)**

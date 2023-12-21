@@ -7,7 +7,7 @@ export class WebTablesExample {
   readonly url: string;
   readonly headerText: string;
   readonly header: Locator;
-  readonly RegForm: WebTablesRegForm;
+  readonly regForm: WebTablesRegForm;
 
   readonly user: WebTableInterface;
 
@@ -19,6 +19,9 @@ export class WebTablesExample {
   readonly columnHeaders: Record<string, Locator>;
   readonly rows: Locator;
   readonly rowGroup: Locator;
+
+
+  // readonly closeButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -33,6 +36,10 @@ export class WebTablesExample {
     this.columnHeaders = this.createColumnHeaders(this.columnHeaderNames);
     this.rows = this.page.getByRole('row')
     this.rowGroup = this.page.getByRole('rowgroup')
+
+    this.regForm = new WebTablesRegForm(this.page);
+
+    // this.closeButton = page.getByRole('button', { name: 'Close' })
 
   }  // End Constructor
 

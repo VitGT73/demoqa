@@ -16,7 +16,7 @@ test.describe("Web tables tests", () => {
         await webTablesPage.assertPageHeader();
     });
 
-    test.(` Click to Column header `, async ({ webTablesPage }) => {
+    test(` Click to Column header `, async ({ webTablesPage }) => {
         const text = await webTablesPage.rowGroup.allInnerTexts();
         console.log(text)
     });
