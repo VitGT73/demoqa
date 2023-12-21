@@ -1,6 +1,8 @@
 # Quick start from a template
 
-Use @playwright/test to create multiple independent test scenarios, and leverage the power of web-first assertions.
+https://www.checklyhq.com/docs/browser-checks/
+
+
 
 ## Table of Contents
 
@@ -27,6 +29,7 @@ Use @playwright/test to create multiple independent test scenarios, and leverage
 
 
 ### Playwright Test example with multiple test cases
+Use @playwright/test to create multiple independent test scenarios, and leverage the power of web-first assertions.
 
 ```typescript
 /**
