@@ -2,7 +2,7 @@
 
 Use @playwright/test to create multiple independent test scenarios, and leverage the power of web-first assertions.
 
-[[_TOC_]]
+[_TOC_]
 
 # dsadas
 # sdsadasd
