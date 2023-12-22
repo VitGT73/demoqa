@@ -7,6 +7,15 @@ export interface WebTableInterface {
     department: string;
 }
 
+export interface noValidWebTableInterface {
+    firstName: string;
+    lastName: string;
+    age: number | string;
+    email: string;
+    salary: number | string;
+    department: string;
+}
+
 type SortDirection = 'asc' | 'desc';
 type SortField = keyof WebTableInterface;
 

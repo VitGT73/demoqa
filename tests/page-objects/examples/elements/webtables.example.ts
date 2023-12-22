@@ -1,6 +1,7 @@
 import { type Page, type Locator, expect } from '@playwright/test';
 import { WebTablesRegForm } from './webtables.regform'
 import { WebTableInterface } from '../../../interfaces/webtables.interface'
+import { assert } from 'console';
 
 export class WebTablesExample {
   readonly page: Page;
@@ -9,7 +10,7 @@ export class WebTablesExample {
   readonly header: Locator;
   readonly regForm: WebTablesRegForm;
 
-  readonly user: WebTableInterface;
+  // readonly user: WebTableInterface;
 
   // Main form
   readonly addButton: Locator;
@@ -64,6 +65,10 @@ export class WebTablesExample {
 
   async assertPageUrl() {
     await expect(this.page).toHaveURL(this.url);
+  }
+
+  async assertAddedPersonInTheTable(data:WebTableInterface){
+    await expect(this.page).toHaveURL("Исправь проверку");
   }
 
 }

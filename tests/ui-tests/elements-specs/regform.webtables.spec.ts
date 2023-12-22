@@ -3,54 +3,226 @@ import { WebTablesRandomData } from '../../testdata/elements/webtables.data';
 
 const data = new WebTablesRandomData();
 
-test.describe.configure({ mode: 'serial' });
-test.describe("Web Tables. Registration Form - ADD user tests", () => {
+// test.describe.configure({ mode: 'serial' });
+test.describe("Web Tables. Registration Form. General tests", () => {
 
-    test.beforeEach( async ({ webTablesPage })=>{
+    test.beforeEach(async ({ webTablesPage }) => {
         await webTablesPage.addButton.click();
     })
 
-    test("Registration Form is Open", async ({ webTablesPage }) => {
+    test("Check Form is Open", async ({ webTablesPage }) => {
         await webTablesPage.regForm.assertFormIsVisible(true);
     });
 
-    test("Has header 'Registration Form'", async ({ webTablesPage }) => {
+    test("Check Has header 'Registration Form'", async ({ webTablesPage }) => {
         await webTablesPage.regForm.assertFormTitle();
     });
 
-    test("Registration Form is Close", async ({ webTablesPage }) => {
+    test("Form is Close after click to X", async ({ webTablesPage }) => {
         await webTablesPage.regForm.closeButton.click();
         await webTablesPage.regForm.assertFormIsVisible(false);
     });
 
-    test("Click out of the Registration Form close Form", async ({ webTablesPage }) => {
+    test("Form is Close after press ESC", async ({ webTablesPage }) => {
+        await webTablesPage.page.keyboard.press('Escape');
+        await webTablesPage.regForm.assertFormIsVisible(false);
+    });
+
+    test("Form is Close after click out of the Form", async ({ webTablesPage }) => {
         await webTablesPage.regForm.outOfRegForm.click();
         await webTablesPage.regForm.assertFormIsVisible(false);
     });
 
-    test.only("Check Submit Empty From", async ({ webTablesPage }) => {
-        await webTablesPage.regForm.submitButton.click();
-        await expect(webTablesPage.regForm.SalaryInput).toHaveCSS('border', '1px solid rgb(220, 53, 69)');
+    test("Fill Form valid data", async ({ webTablesPage }) => {
+        const person = data.getWebTableData()
+        await webTablesPage.regForm.AddPerson(person);
+        await webTablesPage.assertAddedPersonInTheTable(person)
     });
 
+});
 
 
+test.describe("Web Tables. Registration Form. Fill form (negative)", () => {
 
-// 25, 25, ^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+    test.beforeEach(async ({ webTablesPage }) => {
+        await webTablesPage.addButton.click();
+    })
 
+    test("Check Submit Empty From", async ({ webTablesPage }) => {
+        await webTablesPage.regForm.submitButton.click();
+        await webTablesPage.regForm.assertAllFieldHasRedBorder()
+    });
 
-    // test.only(` Click to Column header `, async ({ webTablesPage }) => {
-    //     const text = await webTablesPage.rowGroup.allInnerTexts();
-    //     console.log(text)
-    // });
+    test("All data valid except First Name", async ({ webTablesPage }) => {
+        const person = data.getNoValidWebTableData('First Name')
+        await webTablesPage.regForm.AddPerson(person);
+        await webTablesPage.regForm.assertOneFieldRedOtherGreen('First Name')
+    });
+
+    test("All data valid except Last Name", async ({ webTablesPage }) => {
+        const person = data.getNoValidWebTableData('Last Name')
+        await webTablesPage.regForm.AddPerson(person);
+        await webTablesPage.regForm.assertOneFieldRedOtherGreen('Last Name')
+    });
+
+    test("All data valid except Email", async ({ webTablesPage }) => {
+        const person = data.getNoValidWebTableData('Email')
+        await webTablesPage.regForm.AddPerson(person);
+        await webTablesPage.regForm.assertOneFieldRedOtherGreen('Email')
+    });
+
+    test("All data valid except Age", async ({ webTablesPage }) => {
+        const person = data.getNoValidWebTableData('Age')
+        await webTablesPage.regForm.AddPerson(person);
+        await webTablesPage.regForm.assertOneFieldRedOtherGreen('Age')
+    });
+
+    test("All data valid except Salary", async ({ webTablesPage }) => {
+        const person = data.getNoValidWebTableData('Salary')
+        await webTablesPage.regForm.AddPerson(person);
+        await webTablesPage.regForm.assertOneFieldRedOtherGreen('Salary')
+    });
+
+    test("All data valid except Department", async ({ webTablesPage }) => {
+        const person = data.getNoValidWebTableData('Department')
+        await webTablesPage.regForm.AddPerson(person);
+        await webTablesPage.regForm.assertOneFieldRedOtherGreen('Department')
+    });
 
 
 });
 
-test.describe("Web Tables. Registration Form - EDIT user tests", () => {
+test.describe("Web Tables. Registration Form. Validate fields", () => {
 
-    test.beforeEach( async ({ webTablesPage })=>{
+    test.beforeEach(async ({ webTablesPage }) => {
         await webTablesPage.addButton.click();
+    })
+
+    test("First Name", async ({ webTablesPage }) => {
+        await webTablesPage.regForm.firstNameInput.fill(data.getFirstName(true))
+        await webTablesPage.regForm.submitButton.click();
+        await webTablesPage.regForm.assertFirstNameInput(true)
+    });
+
+    test("Last Name", async ({ webTablesPage }) => {
+        await webTablesPage.regForm.lastNameInput.fill(data.getLastName(true))
+        await webTablesPage.regForm.submitButton.click();
+        await webTablesPage.regForm.assertLastNameInput(true)
+    });
+
+    test("Email", async ({ webTablesPage }) => {
+        await webTablesPage.regForm.ageInput.fill(String(data.getEmail(true)))
+        await webTablesPage.regForm.submitButton.click();
+        await webTablesPage.regForm.assertEmailInput(true)
+    });
+
+
+    test("Age", async ({ webTablesPage }) => {
+        await webTablesPage.regForm.ageInput.fill(String(data.getAge(true)))
+        await webTablesPage.regForm.submitButton.click();
+        await webTablesPage.regForm.assertAgeInput(true)
+    });
+
+    test("Salary", async ({ webTablesPage }) => {
+        await webTablesPage.regForm.salaryInput.fill(String(data.getSalary(true)))
+        await webTablesPage.regForm.submitButton.click();
+        await webTablesPage.regForm.assertSalaryInput(true)
+    });
+    test("Department", async ({ webTablesPage }) => {
+        await webTablesPage.regForm.departmentInput.fill(data.getDepartment(true))
+        await webTablesPage.regForm.submitButton.click();
+        await webTablesPage.regForm.assertDepartmentInput(true)
+    });
+});
+
+test.describe("Web Tables. Registration Form. Validate fields (negative)", () => {
+
+    test.beforeEach(async ({ webTablesPage }) => {
+        await webTablesPage.addButton.click();
+    })
+
+    test("Empty First Name", async ({ webTablesPage }) => {
+        await webTablesPage.regForm.submitButton.click();
+        await webTablesPage.regForm.assertFirstNameInput(false)
+    });
+
+    test("Empty Last Name", async ({ webTablesPage }) => {
+        await webTablesPage.regForm.submitButton.click();
+        await webTablesPage.regForm.assertLastNameInput(false)
+    });
+
+    test("Empty Email", async ({ webTablesPage }) => {
+        await webTablesPage.regForm.submitButton.click();
+        await webTablesPage.regForm.assertEmailInput(false)
+    });
+    test("Empty Age", async ({ webTablesPage }) => {
+        await webTablesPage.regForm.submitButton.click();
+        await webTablesPage.regForm.assertAgeInput(false)
+    });
+
+    test("Test empty Salary", async ({ webTablesPage }) => {
+        await webTablesPage.regForm.submitButton.click();
+        await webTablesPage.regForm.assertSalaryInput(false)
+    });
+
+    test("Test empty Department", async ({ webTablesPage }) => {
+        await webTablesPage.regForm.submitButton.click();
+        await webTablesPage.regForm.assertDepartmentInput(false)
+    });
+
+});
+
+
+
+test.describe("Web Tables. Registration Form. Validate E-mail field.", () => {
+
+    test.beforeEach(async ({ webTablesPage }) => {
+        await webTablesPage.addButton.click();
+    })
+
+    for (const eMail of data.eMails) {
+        test(`Input valid "${eMail.replace('@', ' @ ')}"`, async ({ webTablesPage }) => {
+            await webTablesPage.regForm.emailInput.fill(eMail);
+            await webTablesPage.regForm.submitButton.click();
+            await webTablesPage.regForm.assertEmailInput(true)
+        });
+    }
+
+
+
+});
+
+
+test.describe("Web Tables. Registration Form. Validate E-mail field (negative).", () => {
+
+    test.beforeEach(async ({ webTablesPage }) => {
+        await webTablesPage.addButton.click();
+    })
+
+    for (const eMail of data.badEmails) {
+        test(`Input NO valid "${eMail.replace('@', ' @ ')}"`, async ({ webTablesPage }) => {
+            await webTablesPage.regForm.emailInput.fill(eMail);
+            await webTablesPage.regForm.submitButton.click();
+            await webTablesPage.regForm.assertEmailInput(false)
+        });
+
+    }
+});
+// 25, 25, ^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+
+
+// test.only(` Click to Column header `, async ({ webTablesPage }) => {
+//     const text = await webTablesPage.rowGroup.allInnerTexts();
+//     console.log(text)
+// });
+
+
+
+
+test.describe("Web Tables. Registration Form - EDIT Person tests", () => {
+
+    test.beforeEach(async ({ webTablesPage }) => {
+        // await webTablesPage.addButton.click();
     })
 
     test("Has header 'Registration Form'", async ({ webTablesPage }) => {
