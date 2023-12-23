@@ -13,6 +13,7 @@ export class WebTablesExample {
   // readonly user: WebTableInterface;
 
   // Main form
+  // readonly dialog: Locator;
   readonly addButton: Locator;
   readonly searchInput: Locator;
   readonly searchButton: Locator;
@@ -31,6 +32,7 @@ export class WebTablesExample {
     this.header = page.locator("//div[@class='main-header']");
 
     // Main form
+    // this.dialog = page.getByRole('dialog');
     this.searchInput = page.getByPlaceholder('Type to search');
     this.addButton = page.getByRole('button', { name: 'Add' })
     this.columnHeaderNames = ['First Name', 'Age', 'Email', 'Last Name', 'Salary', 'Department', 'Action'];
@@ -67,7 +69,7 @@ export class WebTablesExample {
     await expect(this.page).toHaveURL(this.url);
   }
 
-  async assertAddedPersonInTheTable(data:WebTableInterface){
+  async assertAddedPersonInTheTable(data: WebTableInterface) {
     await expect(this.page).toHaveURL("Исправь проверку");
   }
 

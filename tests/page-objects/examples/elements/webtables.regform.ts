@@ -4,7 +4,7 @@ import { WebTableInterface, noValidWebTableInterface } from '../../../interfaces
 export class WebTablesRegForm {
   readonly page: Page;
 
-  readonly regForm: Locator;
+  readonly dialog: Locator;
   readonly outOfRegForm: Locator;
   readonly regFormTitle: Locator;
   readonly regFormTitleText: string;
@@ -24,8 +24,7 @@ export class WebTablesRegForm {
     this.page = page;
 
     // Registration Form
-    this.regForm = page.locator('.modal-content');
-    this.outOfRegForm = page.getByRole('dialog');
+    this.dialog = page.locator('.modal-content');
     this.regFormTitleText = 'Registration Form';
     this.regFormTitle = page.getByTestId('registration-form-modal');
     this.firstNameInput = page.getByPlaceholder('First Name')
@@ -55,24 +54,35 @@ export class WebTablesRegForm {
     await this.submitButton.click()
   }
 
-  // async AddPersonNoValidData(data: WebTableInterface) {
-  //   await this.firstNameInput.fill(data.firstName)
-  //   await this.lastNameInput.fill(data.lastName)
-  //   await this.emailInput.fill(data.email)
-  //   await this.ageInput.fill(String(data.age))
-  //   await this.salaryInput.fill(String(data.salary))
-  //   await this.departmentInput.fill(data.department)
-  //   await this.submitButton.click()
-  // }
+  async clickOutOfForm(){
+    // this.regForm.click({ position: { x: 805, y: 445 }})
+    if (this.dialog){
+      const boundingBox = await this.dialog.boundingBox();
+
+      if (boundingBox) {
+        // Кликните за пределами bounding box элемента
+        const x = boundingBox.x + boundingBox.width + 10; // например, справа от элемента
+        const y = boundingBox.y + boundingBox.height + 10; // и немного ниже элемента
+        // console.log(boundingBox.x,boundingBox.y)
+        // console.log(boundingBox.width,boundingBox.height)
+        // console.log(boundingBox.x + boundingBox.width, boundingBox.y + boundingBox.height)
+
+        await this.page.mouse.click(x, y);
+      }
+    }
+  }
+
+
+  // Проверки
   async assertFormTitle() {
     await expect(this.regFormTitle).toHaveText(this.regFormTitleText);
   }
 
   async assertFormIsVisible(isOpen: boolean) {
     if (isOpen) {
-      await expect(this.regForm).toBeVisible()
+      await expect(this.dialog).toBeVisible()
     } else {
-      await expect(this.regForm).toBeHidden()
+      await expect(this.dialog).toBeHidden()
     }
   }
 
