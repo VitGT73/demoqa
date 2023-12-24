@@ -1,6 +1,10 @@
 import { type Page, type Locator, expect } from '@playwright/test';
 import { WebTablesRegForm } from './webtables.regform'
-import { WebTableInterface } from '../../../interfaces/webtables.interface'
+import {
+  WebTableInterface,
+  parseSingleWebTableRow,
+  parseWebTableRows,
+} from '../../../interfaces/webtables.interface'
 import { assert } from 'console';
 
 export class WebTablesExample {
@@ -19,8 +23,9 @@ export class WebTablesExample {
   readonly searchButton: Locator;
   readonly columnHeaderNames: string[];
   readonly columnHeaders: Record<string, Locator>;
-  readonly rows: Locator;
+  readonly tableRows: Locator;
   readonly rowGroup: Locator;
+  readonly gridCell: Locator;
 
 
   // readonly closeButton: Locator;
@@ -37,8 +42,9 @@ export class WebTablesExample {
     this.addButton = page.getByRole('button', { name: 'Add' })
     this.columnHeaderNames = ['First Name', 'Age', 'Email', 'Last Name', 'Salary', 'Department', 'Action'];
     this.columnHeaders = this.createColumnHeaders(this.columnHeaderNames);
-    this.rows = this.page.getByRole('row')
-    this.rowGroup = this.page.getByRole('rowgroup')
+    this.tableRows = page.getByRole('row') // включает заголовок
+    this.rowGroup = page.getByRole('rowgroup') // не включает заголовок
+    this.gridCell = page.getByRole('gridcell')
 
     this.regForm = new WebTablesRegForm(this.page);
 
@@ -60,6 +66,43 @@ export class WebTablesExample {
   async load() {
     await this.page.goto(this.url, { waitUntil: 'domcontentloaded' });
   }
+
+  async getAllRowLocators(): Promise<Locator[]> {
+    const rows = await this.rowGroup.all()
+    return rows
+  }
+
+
+  async getDataArrayFromRows() {
+    const tableData: WebTableInterface[] = [];
+    const rowText = await this.rowGroup.allInnerTexts()
+    const result = parseWebTableRows(rowText)
+    console.log(result)
+
+  }
+
+
+
+  async parseAllRows(): Promise<WebTableInterface[]> {
+    // const rows = await this.getAllRowLocators()
+    const tableData: WebTableInterface[] = [];
+
+    for (const row of await this.getAllRowLocators()) {
+      // const cells = await this.gridCell.all()
+      const rowText = await row.allInnerTexts()
+      console.log(rowText)
+      console.log('============')
+
+      // Заготовка
+
+    }
+
+
+    return tableData;
+  }
+
+
+
 
   async assertPageHeader() {
     await expect(this.header).toHaveText(this.headerText);

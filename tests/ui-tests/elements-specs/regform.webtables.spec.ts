@@ -29,7 +29,7 @@ test.describe("Web Tables. Registration Form.", () => {
             await webTablesPage.regForm.assertFormIsVisible(false);
         });
 
-        test.only(`Form is Close after click out of the Form`, async ({ webTablesPage }) => {
+        test(`Form is Close after click out of the Form`, async ({ webTablesPage }) => {
             // await webTablesPage.regForm.outOfRegForm.click({force:true})
             // await webTablesPage.page.locator('//body').click({force:true})
             await webTablesPage.regForm.clickOutOfForm();

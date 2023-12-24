@@ -86,3 +86,94 @@ export function webTablesFilter(data: WebTableInterface[], filterString: string)
 // const descendingData = webTablesSortByField(data, 'firstName', 'desc');
 // console.log(descendingData);
 // console.log(areArraysEqual(data1, data2)); // Вернет true
+
+
+
+
+
+// export function parseWebTableData(input: string[][]): WebTableInterface[] {
+//     const result: WebTableInterface[] = [];
+
+//     for (const row of input) {
+//         // Пропускаем строки, которые состоят из пустых ячеек
+//         if (row.every(cell => cell.trim() === '')) {
+//             continue;
+//         }
+
+//         // Парсим данные из строки и добавляем объект в результат, пропуская пустые ячейки
+//         const [firstName, lastName, ageStr, email, salaryStr, department] = row.map(cell => cell.trim());
+//         const age = parseInt(ageStr, 10);
+//         const salary = parseInt(salaryStr, 10);
+
+//         // Проверяем, что удалось корректно преобразовать возраст и зарплату
+//         if (!isNaN(age) && !isNaN(salary)) {
+//             result.push({
+//                 firstName,
+//                 lastName,
+//                 age,
+//                 email,
+//                 salary,
+//                 department,
+//             });
+//         }
+//     }
+
+//     return result;
+// }
+
+
+export function addRowToArray(array:WebTableInterface[], row: WebTableInterface):WebTableInterface[]{
+    return [...array, row];
+}
+
+export function removeRowFromArrayByIndex(array: WebTableInterface[], indexToRemove: number):WebTableInterface[]{
+    // используем два среза: до indexToRemove(не включая) и после indexToRemove
+    return array.slice(0, indexToRemove).concat(array.slice(indexToRemove + 1));
+}
+
+export function parseSingleWebTableRow(row: string): WebTableInterface | null {
+    // Пропускаем строки, которые состоят из пустых ячеек
+    if (row.trim() === '') {
+        return null;
+    }
+
+    // Разбиваем строку на ячейки
+    const cells = row.trim().split('\n').map(cell => cell.trim());
+
+    // Пропускаем строки, которые не содержат нужное количество ячеек
+    if (cells.length !== 6) {
+        return null;
+    }
+
+    // Парсим данные из ячеек и возвращаем объект
+    const [firstName, lastName, ageStr, email, salaryStr, department] = cells;
+    const age = parseInt(ageStr, 10);
+    const salary = parseInt(salaryStr, 10);
+
+    // Проверяем, что удалось корректно преобразовать возраст и зарплату
+    if (!isNaN(age) && !isNaN(salary)) {
+        return {
+            firstName,
+            lastName,
+            age,
+            email,
+            salary,
+            department,
+        };
+    } else {
+        return null;
+    }
+}
+
+export function parseWebTableRows(rows: string[]): WebTableInterface[] {
+    const parsedRows: WebTableInterface[] = [];
+
+    for (const row of rows) {
+        const parsedRow = parseSingleWebTableRow(row);
+        if (parsedRow !== null) {
+            parsedRows.push(parsedRow);
+        }
+    }
+
+    return parsedRows;
+}

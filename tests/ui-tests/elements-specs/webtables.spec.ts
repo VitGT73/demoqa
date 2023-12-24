@@ -20,6 +20,10 @@ test.describe("Web tables tests", () => {
         const text = await webTablesPage.rowGroup.allInnerTexts();
         console.log(text)
     });
+    test.only(`Get rows from Table`, async ({ webTablesPage }) => {
+        const text = await webTablesPage.getDataArrayFromRows();
+        console.log(text)
+    });
 
     // for (const headerName of headerNames) {
     //     test(` Click to Column header ${headerName} `, async ({ webTablesPage }) => {
