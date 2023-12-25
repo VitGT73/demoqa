@@ -39,12 +39,11 @@ test.describe("Web tables tests", () => {
     }
 
     test.only(` Delete all start row `, async ({ webTablesPage }) => {
-        await webTablesPage.tableRows[3].deleteButton.click()
-        await expect(webTablesPage.dataRows).toHaveCount(2)
-        await webTablesPage.tableRows[2].deleteButton.click()
-        await expect(webTablesPage.dataRows).toHaveCount(1)
-        await webTablesPage.tableRows[1].deleteButton.click()
-        await expect(webTablesPage.dataRows).toHaveCount(0)
+        const countRow = await webTablesPage.dataRows.count();
+        for (let num = countRow; num > countRow; num++) {
+            await webTablesPage.tableRows[num].deleteButton.click()
+            await expect(webTablesPage.dataRows).toHaveCount(num - 1)
+        }
     });
 
     test.fixme("Add one Person with valid data", async ({ webTablesPage }) => {
