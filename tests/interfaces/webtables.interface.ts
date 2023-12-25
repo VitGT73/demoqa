@@ -1,3 +1,7 @@
+export const headerNames = ['First Name', 'Age', 'Email', 'Last Name', 'Salary', 'Department', 'Action'];
+export const fieldNames = ['First Name', 'Age', 'Email', 'Last Name', 'Salary', 'Department'];
+export const countRowAllowedValues = [5, 10, 20, 25, 50, 100];
+
 export interface WebTableInterface {
     firstName: string;
     lastName: string;
@@ -73,6 +77,17 @@ export function webTablesFilter(data: WebTableInterface[], filterString: string)
     });
 }
 
+export function webTableContainsThisElement(array: WebTableInterface[], element: WebTableInterface): boolean {
+    return array.some(item =>
+        item.firstName === element.firstName &&
+        item.lastName === element.lastName &&
+        item.age === element.age &&
+        item.email === element.email &&
+        item.salary === element.salary &&
+        item.department === element.department
+    );
+}
+
 // // Пример использования:
 // const data: WebTableInterface[] = [
 //     { firstName: "John", lastName: "Doe", age: 30, email: "john@example.com", salary: 50000, department: "IT" },
@@ -86,40 +101,6 @@ export function webTablesFilter(data: WebTableInterface[], filterString: string)
 // const descendingData = webTablesSortByField(data, 'firstName', 'desc');
 // console.log(descendingData);
 // console.log(areArraysEqual(data1, data2)); // Вернет true
-
-
-
-
-
-// export function parseWebTableData(input: string[][]): WebTableInterface[] {
-//     const result: WebTableInterface[] = [];
-
-//     for (const row of input) {
-//         // Пропускаем строки, которые состоят из пустых ячеек
-//         if (row.every(cell => cell.trim() === '')) {
-//             continue;
-//         }
-
-//         // Парсим данные из строки и добавляем объект в результат, пропуская пустые ячейки
-//         const [firstName, lastName, ageStr, email, salaryStr, department] = row.map(cell => cell.trim());
-//         const age = parseInt(ageStr, 10);
-//         const salary = parseInt(salaryStr, 10);
-
-//         // Проверяем, что удалось корректно преобразовать возраст и зарплату
-//         if (!isNaN(age) && !isNaN(salary)) {
-//             result.push({
-//                 firstName,
-//                 lastName,
-//                 age,
-//                 email,
-//                 salary,
-//                 department,
-//             });
-//         }
-//     }
-
-//     return result;
-// }
 
 
 export function addRowToArray(array:WebTableInterface[], row: WebTableInterface):WebTableInterface[]{
@@ -174,6 +155,6 @@ export function parseWebTableRows(rows: string[]): WebTableInterface[] {
             parsedRows.push(parsedRow);
         }
     }
-
+    console.log('parsedRows: ',parsedRows)
     return parsedRows;
 }

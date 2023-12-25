@@ -1,18 +1,27 @@
-import { WebTableInterface, noValidWebTableInterface } from '../../interfaces/webtables.interface';
+import {
+  WebTableInterface,
+  noValidWebTableInterface,
+  headerNames,
+  fieldNames,
+  countRowAllowedValues,
+} from '../../interfaces/webtables.interface';
 
 import { faker } from '@faker-js/faker';
 
 
 export class WebTablesRandomData {
 
-  public readonly headerNames: string[];
-  public readonly fieldNames: string[];
+  // public readonly headerNames: string[];
+  // public readonly fieldNames: string[];
   public readonly eMails: string[];
   public readonly badEmails: string[];
+  // public readonly countRowAllowedValues: number[];
 
   constructor() {
-    this.headerNames = ['First Name', 'Age', 'Email', 'Last Name', 'Salary', 'Department', 'Action'];
-    this.fieldNames = ['First Name', 'Age', 'Email', 'Last Name', 'Salary', 'Department'];
+    // this.headerNames = ['First Name', 'Age', 'Email', 'Last Name', 'Salary', 'Department', 'Action'];
+    // this.fieldNames = ['First Name', 'Age', 'Email', 'Last Name', 'Salary', 'Department'];
+    // this.countRowAllowedValues = [5, 10, 20, 25, 50, 100];
+
     this.eMails = [
       "user@example.com",
       "user123@domain.test",
@@ -137,7 +146,7 @@ export class WebTablesRandomData {
       email: this.getEmail(!isTrueForParameter('Email')),
       // age и salary не могут вернуть строку, только число, поэтому для них изменил код
       age: !isTrueForParameter('Age') ? this.getAge(true) : '',
-      salary: !isTrueForParameter('Salary') ? this.getSalary(true): '',
+      salary: !isTrueForParameter('Salary') ? this.getSalary(true) : '',
       department: this.getDepartment(!isTrueForParameter('Department'))
     };
 

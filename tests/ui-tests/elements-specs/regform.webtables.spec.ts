@@ -1,6 +1,7 @@
 import { test, expect } from "../../fixtures/elements.fixture";
 import { WebTablesRandomData } from '../../testdata/elements/webtables.data';
 
+
 const data = new WebTablesRandomData();
 
 // test.describe.configure({ mode: 'serial' });
@@ -16,7 +17,7 @@ test.describe("Web Tables. Registration Form.", () => {
         });
 
         test("Check Has header 'Registration Form'", async ({ webTablesPage }) => {
-            await webTablesPage.regForm.assertFormTitle();
+            await webTablesPage.regForm.assertFormTitle(true);
         });
 
         test("Form is Close after click to X", async ({ webTablesPage }) => {
@@ -37,11 +38,14 @@ test.describe("Web Tables. Registration Form.", () => {
         });
 
 
-        test.fixme("Fill Form valid data", async ({ webTablesPage }) => {
+        test("Fill Form valid data", async ({ webTablesPage }) => {
             const person = data.getWebTableData()
+            // console.log('Person in test: ',person)
             await webTablesPage.regForm.AddPerson(person);
-            await webTablesPage.assertAddedPersonInTheTable(person)
+            await webTablesPage.regForm.assertFormIsVisible(false);
+
         });
+
 
     });
 
@@ -230,7 +234,7 @@ test.describe("Web Tables. Registration Form.", () => {
         })
 
         test("Has header 'Registration Form'", async ({ webTablesPage }) => {
-            await webTablesPage.regForm.assertFormTitle();
+            await webTablesPage.regForm.assertFormTitle(true);
         });
 
     });

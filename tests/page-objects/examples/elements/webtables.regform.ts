@@ -54,9 +54,9 @@ export class WebTablesRegForm {
     await this.submitButton.click()
   }
 
-  async clickOutOfForm(){
+  async clickOutOfForm() {
     // this.regForm.click({ position: { x: 805, y: 445 }})
-    if (this.dialog){
+    if (this.dialog) {
       const boundingBox = await this.dialog.boundingBox();
 
       if (boundingBox) {
@@ -72,10 +72,15 @@ export class WebTablesRegForm {
     }
   }
 
-
   // Проверки
-  async assertFormTitle() {
-    await expect(this.regFormTitle).toHaveText(this.regFormTitleText);
+
+  async assertFormTitle(isOpen: boolean) {
+    if (isOpen) {
+      await expect(this.regFormTitle).toHaveText(this.regFormTitleText);
+    } else {
+      await expect(this.regFormTitle).not.toHaveText(this.regFormTitleText);
+    }
+
   }
 
   async assertFormIsVisible(isOpen: boolean) {
@@ -135,7 +140,7 @@ export class WebTablesRegForm {
     }
   }
 
-  async assertAllFieldHasRedBorder(){
+  async assertAllFieldHasRedBorder() {
     await this.assertFirstNameInput(false);
     await this.assertLastNameInput(false);
     await this.assertEmailInput(false);
@@ -145,7 +150,7 @@ export class WebTablesRegForm {
   }
 
 
-  async assertOneFieldRedOtherGreen(parameter: string){
+  async assertOneFieldRedOtherGreen(parameter: string) {
     // Только одна проверка выполняется с параметром false, остальные с true
     const isTrueForParameter = (param: string): boolean => param === parameter;
 
