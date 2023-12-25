@@ -30,7 +30,8 @@ export class WebTablesExample {
   // readonly columnHeaderNames: string[];
   readonly columnHeaders: Record<string, Locator>;
   public tableRows: Record<number, TableRow>;
-  readonly allDataRows: Locator;
+  readonly allRows: Locator;
+  readonly dataRows: Locator;
   readonly gridCell: Locator;
 
 
@@ -60,10 +61,11 @@ export class WebTablesExample {
 
 
     // this.tableRows = page.getByRole('row') // включает заголовок
-    this.allDataRows = page.getByRole('rowgroup') // не включает заголовок
+    this.allRows = page.getByRole('rowgroup') // не включает заголовок
+    this.dataRows = page
+      .getByRole('rowgroup')
+      .filter({ has: page.getByRole('gridcell', { name: 'Edit Delete' }) }) // строки с данными
     this.gridCell = page.getByRole('gridcell')
-
-
 
     this.pageNumberInput = page.getByLabel('jump to page');
     this.countRowsOnPageListBox = page.getByLabel('rows per page')
@@ -86,7 +88,7 @@ export class WebTablesExample {
     const rows: Record<number, TableRow> = {};
 
     for (let rowNumber = 1; rowNumber <= countRows; rowNumber++) {
-      rows[rowNumber] = new TableRow(this.allDataRows.nth(rowNumber - 1))
+      rows[rowNumber] = new TableRow(this.allRows.nth(rowNumber - 1))
     };
 
     return rows;
@@ -138,14 +140,14 @@ export class WebTablesExample {
   }
 
   async getAllRowLocators(): Promise<Locator[]> {
-    const rows = await this.allDataRows.all()
+    const rows = await this.allRows.all()
     return rows
   }
 
 
   async getPersonsFromWebTable(): Promise<WebTableInterface[]> {
-    await expect(this.allDataRows).toHaveCount(this.countRowsOnPage)
-    const gridText = await this.allDataRows.allInnerTexts()
+    await expect(this.allRows).toHaveCount(this.countRowsOnPage)
+    const gridText = await this.allRows.allInnerTexts()
     const result = parseWebTableRows(gridText)
     return result;
   }
@@ -197,13 +199,14 @@ export class WebTablesExample {
     await expect(result).toBeTruthy();
   }
 
-  async assertCountRowOnPage(count: number){
+  async assertCountAllRowOnPage(count: number) {
     await expect(this.countRowsOnPage).toBe(count)
   }
 
-  async assertCountAllDataRow(count: number){
+
+  async assertCountAllDataRow(count: number) {
     await expect(this.countRowsOnPage).toBe(count)
-    await expect(this.allDataRows).toHaveCount(count)
+    await expect(this.dataRows).toHaveCount(count)
   }
 
 

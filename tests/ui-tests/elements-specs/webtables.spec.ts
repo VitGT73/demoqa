@@ -18,24 +18,33 @@ test.describe("Web tables tests", () => {
         await webTablesPage.assertPageHeader();
     });
 
-    test(` Click to Column header `, async ({ webTablesPage }) => {
-        const text = await webTablesPage.allDataRows.allInnerTexts();
-        console.log(text)
+    test.fixme(` Click to Column header `, async ({ webTablesPage }) => {
+        const text = await webTablesPage.dataRows.allInnerTexts();
     });
 
     for (const count of countRowAllowedValues) {
-        test.only(`Set ${count} Row in List box`, async ({ webTablesPage }) => {
+        test(`Set ${count} Row in List box`, async ({ webTablesPage }) => {
             await webTablesPage.setCountRowsOnPage(count)
             await webTablesPage.assertCountAllDataRow(count)
         });
     }
-    test.fixme(`Get rows from Table`, async ({ webTablesPage }) => {
-        await webTablesPage.page.waitForTimeout(1000)
-        await webTablesPage.tableRows[3].deleteButton.click()
-        await webTablesPage.page.waitForTimeout(3000)
 
-        // const text = await webTablesPage.getPersonFromWebTableRow(row);
-        // console.log(text)
+    for (const num of ['3','2','1']) {
+        test(`Delete one row number: ${num}`, async ({ webTablesPage }) => {
+            const countRow = await webTablesPage.dataRows.count();
+
+            await webTablesPage.tableRows[num].deleteButton.click()
+            await expect(webTablesPage.dataRows).toHaveCount(countRow-1)
+        });
+    }
+
+    test.only(` Delete all start row `, async ({ webTablesPage }) => {
+        await webTablesPage.tableRows[3].deleteButton.click()
+        await expect(webTablesPage.dataRows).toHaveCount(2)
+        await webTablesPage.tableRows[2].deleteButton.click()
+        await expect(webTablesPage.dataRows).toHaveCount(1)
+        await webTablesPage.tableRows[1].deleteButton.click()
+        await expect(webTablesPage.dataRows).toHaveCount(0)
     });
 
     test.fixme("Add one Person with valid data", async ({ webTablesPage }) => {
