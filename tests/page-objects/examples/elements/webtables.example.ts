@@ -29,8 +29,8 @@ export class WebTablesExample {
   readonly $searchButton: Locator;
   // readonly columnHeaderNames: string[];
   readonly columnHeaders: Record<string, Locator>;
-  public allRowsList: Record<number, AnyRow>;
-  public dataRowsList: Record<number, DataRow>;
+  private allRowsList: Record<number, AnyRow>;
+  private dataRowsList: Record<number, DataRow>;  // 1
   readonly $allRows: Locator;
   readonly $dataRows: Locator;
   readonly $gridCell: Locator;
@@ -79,7 +79,7 @@ export class WebTablesExample {
     this.columnHeaders = this.createColumnHeaders(headerNames);
     // this.countRowsOnPage = 10;
     this.allRowsList =this.reNewAllRows()
-    this.dataRowsList =this.reNewDataRows()
+    this.dataRowsList =this.reNewDataRows() // 2
 
     // this.initialize();
     // this.allRows = await this.reNewAllRows();
@@ -104,11 +104,11 @@ export class WebTablesExample {
     return rows;
   }
 
-  // public async reNewDataRows(): Promise<Record<number, DataRow>> {
+//   public async reNewDataRows(): Promise<Record<number, DataRow>> {
   public reNewDataRows(): Record<number, DataRow> {
     const rows: Record<number, DataRow> = {};
     // const countRows = await this.getCountRowsOnPage()
-    const countRows = 4
+    const countRows = 3
 
     for (let rowNumber = 1; rowNumber <= countRows; rowNumber++) {
       rows[rowNumber] = new DataRow(this.$dataRows.nth(rowNumber - 1))
@@ -120,9 +120,19 @@ export class WebTablesExample {
   private async getCountRowsOnPage(): Promise<number> {
     // const count = 10
     // const count = await this.$countRowsOnPageListBox.inputValue()
-    await expect(this.$countRowsOnPageListBox).toHaveValue(String(10))
+    // await expect(this.$countRowsOnPageListBox).toHaveValue(String(10))
     const count = await this.page.getByLabel('rows per page').inputValue();
     return Number(count);
+  }
+
+  public async deleteRowFromGrid(num: number){
+    await this.reNewDataRows();
+    const keysList = Object.keys(this.dataRowsList);
+
+    if (keysList.includes(num.toString())) {
+        this.dataRowsList[num].$deleteButton.click()
+        await this.reNewDataRows();
+    }
   }
 
   private createColumnHeaders(columnHeaderNames: string[]): Record<string, Locator> {
@@ -143,6 +153,8 @@ export class WebTablesExample {
 
     // console.log('Count of row =', String(newCount))
     await this.$countRowsOnPageListBox.selectOption(String(newCount))
+    await this.reNewDataRows();
+    await this.reNewAllRows();
   }
 
 

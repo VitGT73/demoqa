@@ -32,20 +32,16 @@ test.describe("Web tables tests", () => {
     for (let num of [3,2,1]) {
         test(`Delete one row number: ${num}`, async ({ webTablesPage }) => {
             const countRow = await webTablesPage.$dataRows.count();
-            await webTablesPage.dataRowsList[num].$deleteButton.click()
+            await webTablesPage.deleteRowFromGrid(num)
             await expect(webTablesPage.$dataRows).toHaveCount(countRow-1)
         });
     }
 
-    test.only(` Delete all start row `, async ({ webTablesPage }) => {
-        const countRow = 3;
-        // const countRow = await webTablesPage.$dataRows.count();
-        for (let num = countRow; num > countRow; num++) {
-            console.log('Количество: ',num,'\n', webTablesPage.dataRowsList)
-            await webTablesPage.dataRowsList[num].$deleteButton.click()
-            await webTablesPage.reNewDataRows();
-            await expect(webTablesPage.$dataRows).toHaveCount(num - 1)
-            console.log(webTablesPage.dataRowsList)
+    test(` Delete all start row `, async ({ webTablesPage }) => {
+        const countRow = await webTablesPage.$dataRows.count();
+        for (let num = countRow; num >= 1; num--) {
+            await webTablesPage.deleteRowFromGrid(num)
+            await expect(webTablesPage.$dataRows).toHaveCount(num-1)
         }
     });
 
@@ -74,6 +70,8 @@ test.describe("Web tables tests", () => {
     //         await webTablesPage.assertPageHeader();
     //     });
     // }
+
+    
     // test(` Check listbox `, async ({ webTablesPage }) => {
     //     const result1 = await webTablesPage.$countRowsOnPageListBox.allInnerTexts();
     //     console.log(result1)

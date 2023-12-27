@@ -1,22 +1,17 @@
-// import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
+test.use({
+  viewport: {
+    height: 1080,
+    width: 1400
+  }
+});
 
-// test.describe.configure({ mode: 'serial'});
-// test.describe("Check Box element tests", () => {
-//     // Случайным образом выбираем несколько чекбоксов (например, 3)
-//     use:{headless: false }
-//     test('Click on the "Desktop" checkbox', async ({ page }) => {
-
-//         await page.goto('https://demoqa.com/checkbox', { waitUntil: 'domcontentloaded' })
-//         await page.getByLabel('Expand all').click();
-//         // const locator = page.locator('label').filter({ hasText: 'React' }).getByRole('img').first()
-//         const locator = page.locator('label').filter({ hasText: 'React' })
-//         await locator.click();
-//         const checked = await locator.isChecked()
-//         console.error('Check box React checked: ' + checked);
-
-//         await expect(locator).toBeChecked()
-//         await page.waitForTimeout(2000)
-
-//     })
-// })
+test.skip('test', async ({ page }) => {
+  await page.goto('https://demoqa.com/', { waitUntil: "domcontentloaded" });
+  await page.getByRole('heading', { name: 'Elements' }).click();
+  await page.getByText('Text Box').click();
+  await page.getByText('Web Tables').click();
+  await page.locator('#edit-record-3').getByRole('img').click();
+  await expect(page.locator('#registration-form-modal')).toContainText('Registration Form');
+});
