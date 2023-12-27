@@ -9,7 +9,7 @@ test.describe("Web Tables. Registration Form.", () => {
     test.describe("General tests", () => {
 
         test.beforeEach(async ({ webTablesPage }) => {
-            await webTablesPage.addButton.click();
+            await webTablesPage.$addButton.click();
         })
 
         test("Check Form is Open", async ({ webTablesPage }) => {
@@ -38,10 +38,10 @@ test.describe("Web Tables. Registration Form.", () => {
         });
 
 
-        test("Fill Form valid data", async ({ webTablesPage }) => {
+        test("Click 'Submit' after Fill Form valid data", async ({ webTablesPage }) => {
             const person = data.getWebTableData()
             // console.log('Person in test: ',person)
-            await webTablesPage.regForm.AddPerson(person);
+            await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertFormIsVisible(false);
 
         });
@@ -53,7 +53,7 @@ test.describe("Web Tables. Registration Form.", () => {
     test.describe("Fill form (negative)", () => {
 
         test.beforeEach(async ({ webTablesPage }) => {
-            await webTablesPage.addButton.click();
+            await webTablesPage.$addButton.click();
         })
 
         test("Check Submit Empty From", async ({ webTablesPage }) => {
@@ -63,37 +63,37 @@ test.describe("Web Tables. Registration Form.", () => {
 
         test("All data valid except First Name", async ({ webTablesPage }) => {
             const person = data.getNoValidWebTableData('First Name')
-            await webTablesPage.regForm.AddPerson(person);
+            await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertOneFieldRedOtherGreen('First Name')
         });
 
         test("All data valid except Last Name", async ({ webTablesPage }) => {
             const person = data.getNoValidWebTableData('Last Name')
-            await webTablesPage.regForm.AddPerson(person);
+            await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertOneFieldRedOtherGreen('Last Name')
         });
 
         test("All data valid except Email", async ({ webTablesPage }) => {
             const person = data.getNoValidWebTableData('Email')
-            await webTablesPage.regForm.AddPerson(person);
+            await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertOneFieldRedOtherGreen('Email')
         });
 
         test("All data valid except Age", async ({ webTablesPage }) => {
             const person = data.getNoValidWebTableData('Age')
-            await webTablesPage.regForm.AddPerson(person);
+            await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertOneFieldRedOtherGreen('Age')
         });
 
         test("All data valid except Salary", async ({ webTablesPage }) => {
             const person = data.getNoValidWebTableData('Salary')
-            await webTablesPage.regForm.AddPerson(person);
+            await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertOneFieldRedOtherGreen('Salary')
         });
 
         test("All data valid except Department", async ({ webTablesPage }) => {
             const person = data.getNoValidWebTableData('Department')
-            await webTablesPage.regForm.AddPerson(person);
+            await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertOneFieldRedOtherGreen('Department')
         });
 
@@ -103,7 +103,7 @@ test.describe("Web Tables. Registration Form.", () => {
     test.describe("Validate fields", () => {
 
         test.beforeEach(async ({ webTablesPage }) => {
-            await webTablesPage.addButton.click();
+            await webTablesPage.$addButton.click();
         })
 
         test("First Name", async ({ webTablesPage }) => {
@@ -146,7 +146,7 @@ test.describe("Web Tables. Registration Form.", () => {
     test.describe("Validate fields (negative)", () => {
 
         test.beforeEach(async ({ webTablesPage }) => {
-            await webTablesPage.addButton.click();
+            await webTablesPage.$addButton.click();
         })
 
         test("Empty First Name", async ({ webTablesPage }) => {
@@ -185,7 +185,7 @@ test.describe("Web Tables. Registration Form.", () => {
     test.describe("Validate E-mail field.", () => {
 
         test.beforeEach(async ({ webTablesPage }) => {
-            await webTablesPage.addButton.click();
+            await webTablesPage.$addButton.click();
         })
 
         for (const eMail of data.eMails) {
@@ -204,7 +204,7 @@ test.describe("Web Tables. Registration Form.", () => {
     test.describe.fixme("Validate E-mail field (negative).", () => {
 
         test.beforeEach(async ({ webTablesPage }) => {
-            await webTablesPage.addButton.click();
+            await webTablesPage.$addButton.click();
         })
 
         for (const eMail of data.badEmails) {
@@ -227,15 +227,21 @@ test.describe("Web Tables. Registration Form.", () => {
 
 
 
-    test.describe.fixme("Registration Form - EDIT Person tests", () => {
+    // test.describe("Registration Form - EDIT Person tests", () => {
 
-        test.beforeEach(async ({ webTablesPage }) => {
-            // await webTablesPage.addButton.click();
-        })
+    //     test.beforeEach(async ({ webTablesPage }) => {
+    //         // await webTablesPage.addButton.click();
+    //     })
 
-        test("Has header 'Registration Form'", async ({ webTablesPage }) => {
-            await webTablesPage.regForm.assertFormTitle(true);
-        });
+    //     test("Has header 'Registration Form'", async ({ webTablesPage }) => {
+    //         await webTablesPage.regForm.assertFormTitle(true);
+    //     });
 
-    });
+    //     test.fixme("Has XXXXX ader 'Registration Form'", async ({ webTablesPage }) => {
+    //         await expect(webTablesPage.$countRowsOnPageListBox).toHaveValue(String(10))
+    //         const result = await webTablesPage.$countRowsOnPageListBox.inputValue()
+    //         console.log(result)
+    //     });
+
+    // });
 });

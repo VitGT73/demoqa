@@ -155,6 +155,6 @@ export function parseWebTableRows(rows: string[]): WebTableInterface[] {
             parsedRows.push(parsedRow);
         }
     }
-    console.log('parsedRows: ',parsedRows)
+    // console.log('parsedRows: ',parsedRows)
     return parsedRows;
 }

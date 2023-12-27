@@ -1,22 +1,28 @@
 import { Locator } from 'playwright';
 
-
-export class TableRow {
-    // private readonly page: Page;
-    // private readonly rowIndex: number;
-    readonly editButton: Locator;
-    readonly deleteButton: Locator;
-    // readonly allRow:Locator
-    readonly row: Locator;
+class TableRow {
+    readonly $row: Locator;
+    readonly $gridCell: Locator;
 
     constructor(row: Locator) {
-        this.row = row;
-        // this.rowIndex = rowIndex;
-        // this.allRow = page.getByRole('rowgroup')
-        this.editButton = row.getByTitle('Edit')
-        this.deleteButton = row.getByTitle('Delete')
+        this.$row = row;
+        this.$gridCell = row.getByRole('gridcell');
     }
-
 }
 
-export default TableRow
+export class AnyRow extends TableRow {
+    constructor(row: Locator) {
+        super(row);
+    }
+}
+
+export class DataRow extends TableRow {
+    readonly $editButton: Locator;
+    readonly $deleteButton: Locator;
+
+    constructor(row: Locator) {
+        super(row);
+        this.$editButton = row.getByTitle('Edit');
+        this.$deleteButton = row.getByTitle('Delete');
+    }
+}

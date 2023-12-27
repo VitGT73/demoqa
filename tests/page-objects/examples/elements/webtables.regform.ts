@@ -44,7 +44,7 @@ export class WebTablesRegForm {
 
   }  // End Constructor
 
-  async AddPerson(data: WebTableInterface | noValidWebTableInterface) {
+  async FillForm(data: WebTableInterface | noValidWebTableInterface) {
     await this.firstNameInput.fill(data.firstName)
     await this.lastNameInput.fill(data.lastName)
     await this.emailInput.fill(data.email)

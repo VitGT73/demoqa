@@ -1,6 +1,6 @@
 import { type Page, type Locator, expect } from '@playwright/test';
 import { WebTablesRegForm } from './webtables.regform'
-import { TableRow } from './webtables.tablerow'
+import { AnyRow, DataRow } from './webtables.tablerow'
 import {
   WebTableInterface,
   parseSingleWebTableRow,
@@ -8,7 +8,7 @@ import {
   webTableContainsThisElement,
   countRowAllowedValues,
   headerNames,
-  fieldNames,
+
 } from '../../../interfaces/webtables.interface'
 // import { assert } from 'console';
 
@@ -16,7 +16,7 @@ export class WebTablesExample {
   readonly page: Page;
   readonly url: string;
   readonly headerText: string;
-  readonly header: Locator;
+  readonly $header: Locator;
   readonly regForm: WebTablesRegForm;
   // readonly tableRows : TableRow[];
 
@@ -24,25 +24,26 @@ export class WebTablesExample {
 
   // Main form
   // readonly dialog: Locator;
-  readonly addButton: Locator;
-  readonly searchInput: Locator;
-  readonly searchButton: Locator;
+  readonly $addButton: Locator;
+  readonly $searchInput: Locator;
+  readonly $searchButton: Locator;
   // readonly columnHeaderNames: string[];
   readonly columnHeaders: Record<string, Locator>;
-  public tableRows: Record<number, TableRow>;
-  readonly allRows: Locator;
-  readonly dataRows: Locator;
-  readonly gridCell: Locator;
+  public allRowsList: Record<number, AnyRow>;
+  public dataRowsList: Record<number, DataRow>;
+  readonly $allRows: Locator;
+  readonly $dataRows: Locator;
+  readonly $gridCell: Locator;
 
 
 
-  readonly previousButton: Locator;
-  readonly nextButton: Locator;
-  readonly pageNumberInput: Locator;
-  private countRowsOnPageListBox: Locator;
+  readonly $previousButton: Locator;
+  readonly $nextButton: Locator;
+  readonly $pageNumberInput: Locator;
+  readonly $countRowsOnPageListBox: Locator;
 
-  readonly pageTotalText: Locator;
-  private _countRowsOnPage: number;
+  readonly $pageTotalText: Locator;
+  // private countRowsOnPage: number;
 
   // readonly closeButton: Locator;
 
@@ -52,46 +53,76 @@ export class WebTablesExample {
     this.page = page;
     this.url = "/webtables";
     this.headerText = "Web Tables";
-    this.header = page.locator("//div[@class='main-header']");
+    this.$header = page.locator("//div[@class='main-header']");
     this.regForm = new WebTablesRegForm(this.page);
     // Main form
     // this.dialog = page.getByRole('dialog');
-    this.searchInput = page.getByPlaceholder('Type to search');
-    this.addButton = page.getByRole('button', { name: 'Add' })
+    this.$searchInput = page.getByPlaceholder('Type to search');
+    this.$addButton = page.getByRole('button', { name: 'Add' })
 
 
     // this.tableRows = page.getByRole('row') // включает заголовок
-    this.allRows = page.getByRole('rowgroup') // не включает заголовок
-    this.dataRows = page
+    this.$allRows = page.getByRole('rowgroup') // не включает заголовок
+    this.$dataRows = page
       .getByRole('rowgroup')
       .filter({ has: page.getByRole('gridcell', { name: 'Edit Delete' }) }) // строки с данными
-    this.gridCell = page.getByRole('gridcell')
+    this.$gridCell = page.getByRole('gridcell')
 
-    this.pageNumberInput = page.getByLabel('jump to page');
-    this.countRowsOnPageListBox = page.getByLabel('rows per page')
-    this.pageTotalText = page.locator('.-totalPages')
-    this.previousButton = page.getByRole('button', { name: 'Previous' })
-    this.nextButton = page.getByRole('button', { name: 'Next' })
+    this.$pageNumberInput = page.getByLabel('jump to page');
+    this.$countRowsOnPageListBox = page.getByLabel('rows per page')
+    this.$pageTotalText = page.locator('.-totalPages')
+    this.$previousButton = page.getByRole('button', { name: 'Previous' })
+    this.$nextButton = page.getByRole('button', { name: 'Next' })
 
 
     // this.columnHeaderNames = ['First Name', 'Age', 'Email', 'Last Name', 'Salary', 'Department', 'Action'];
     this.columnHeaders = this.createColumnHeaders(headerNames);
-    this._countRowsOnPage = 10;
+    // this.countRowsOnPage = 10;
+    this.allRowsList =this.reNewAllRows()
+    this.dataRowsList =this.reNewDataRows()
 
-    this.tableRows = this.createTableRows(this.countRowsOnPage);
+    // this.initialize();
+    // this.allRows = await this.reNewAllRows();
 
 
 
   }  // End Constructor
+  // private async initialize(): Promise<void> {
+  //   this.allRows = await this.reNewAllRows();
+  //   this.dataRows = await this.reNewDataRows();
+  // }
 
-  private createTableRows(countRows: number): Record<number, TableRow> {
-    const rows: Record<number, TableRow> = {};
 
+  public reNewAllRows(): Record<number, AnyRow> {
+    const rows: Record<number, AnyRow> = {};
+    // const countRows = await this.getCountRowsOnPage()
+    const countRows = 10
     for (let rowNumber = 1; rowNumber <= countRows; rowNumber++) {
-      rows[rowNumber] = new TableRow(this.allRows.nth(rowNumber - 1))
+      rows[rowNumber] = new AnyRow(this.$allRows.nth(rowNumber - 1))
     };
 
     return rows;
+  }
+
+  // public async reNewDataRows(): Promise<Record<number, DataRow>> {
+  public reNewDataRows(): Record<number, DataRow> {
+    const rows: Record<number, DataRow> = {};
+    // const countRows = await this.getCountRowsOnPage()
+    const countRows = 4
+
+    for (let rowNumber = 1; rowNumber <= countRows; rowNumber++) {
+      rows[rowNumber] = new DataRow(this.$dataRows.nth(rowNumber - 1))
+    };
+
+    return rows;
+  }
+
+  private async getCountRowsOnPage(): Promise<number> {
+    // const count = 10
+    // const count = await this.$countRowsOnPageListBox.inputValue()
+    await expect(this.$countRowsOnPageListBox).toHaveValue(String(10))
+    const count = await this.page.getByLabel('rows per page').inputValue();
+    return Number(count);
   }
 
   private createColumnHeaders(columnHeaderNames: string[]): Record<string, Locator> {
@@ -104,18 +135,6 @@ export class WebTablesExample {
     return columnHeaders;
   }
 
-  // Setters
-
-  private set countRowsOnPage(newCount: number) {
-    // const allowedValues = [5, 10, 20, 25, 50, 100];
-
-    expect(newCount, `Invalid value for countRowsOnPage. It must be greater than 0 and one of the allowed values: ${countRowAllowedValues.join(', ')}`).toBeGreaterThan(0);
-    expect(countRowAllowedValues, `Invalid value for countRowsOnPage. It must be one of the allowed values: ${countRowAllowedValues.join(', ')}`).toContain(newCount);
-
-    this._countRowsOnPage = newCount;
-    this.tableRows = this.createTableRows(this.countRowsOnPage);
-  }
-
   public async setCountRowsOnPage(newCount: number) {
     // const allowedValues = [5, 10, 20, 25, 50, 100];
 
@@ -123,14 +142,7 @@ export class WebTablesExample {
     expect(countRowAllowedValues, `Invalid value for countRowsOnPage. It must be one of the allowed values: ${countRowAllowedValues.join(', ')}`).toContain(newCount);
 
     // console.log('Count of row =', String(newCount))
-    await this.countRowsOnPageListBox.selectOption(String(newCount))
-    this.countRowsOnPage = newCount
-  }
-
-
-  // Getters
-  public get countRowsOnPage() {
-    return this._countRowsOnPage;
+    await this.$countRowsOnPageListBox.selectOption(String(newCount))
   }
 
 
@@ -139,20 +151,15 @@ export class WebTablesExample {
     await this.page.goto(this.url, { waitUntil: 'domcontentloaded' });
   }
 
-  async getAllRowLocators(): Promise<Locator[]> {
-    const rows = await this.allRows.all()
-    return rows
-  }
 
 
   async getPersonsFromWebTable(): Promise<WebTableInterface[]> {
-    await expect(this.allRows).toHaveCount(this.countRowsOnPage)
-    const gridText = await this.allRows.allInnerTexts()
+    const count = await this.getCountRowsOnPage()
+    await expect(this.$allRows).toHaveCount(count)
+    const gridText = await this.$allRows.allInnerTexts()
     const result = parseWebTableRows(gridText)
     return result;
   }
-
-
 
   async getPersonFromWebTableRow(row: Locator): Promise<WebTableInterface | null> {
     const rowTexts = await row.allInnerTexts();
@@ -168,24 +175,34 @@ export class WebTablesExample {
     }
   }
 
-  async parseAllRows(): Promise<WebTableInterface[]> {
-    // const rows = await this.getAllRowLocators()
-    const tableData: WebTableInterface[] = [];
 
-    for (const row of await this.getAllRowLocators()) {
-      // const cells = await this.gridCell.all()
-      const rowText = await row.allInnerTexts()
-      console.log(rowText)
-      console.log('============')
+  // async getAllRowLocators(): Promise<Locator[]> {
+  //   const rows = await this.$allRows.all()
+  //   return rows
+  // }
+  // async parseAllRows(): Promise<WebTableInterface[]> {
+  //   // const rows = await this.getAllRowLocators()
+  //   const tableData: WebTableInterface[] = [];
 
-      // Заготовка
+  //   for (const row of await this.getAllRowLocators()) {
+  //     // const cells = await this.gridCell.all()
+  //     const rowText = await row.allInnerTexts()
+  //     console.log(rowText)
+  //     console.log('============')
 
-    }
-    return tableData;
+  //     // Заготовка
+
+  //   }
+  //   return tableData;
+  // }
+
+  async addOnePerson(person:WebTableInterface){
+    await this.$addButton.click()
+    await this.regForm.FillForm(person);
   }
 
   async assertPageHeader() {
-    await expect(this.header).toHaveText(this.headerText);
+    await expect(this.$header).toHaveText(this.headerText);
   }
 
   async assertPageUrl() {
@@ -200,13 +217,13 @@ export class WebTablesExample {
   }
 
   async assertCountAllRowOnPage(count: number) {
-    await expect(this.countRowsOnPage).toBe(count)
+    await expect(this.$countRowsOnPageListBox).toHaveValue(String(count))
   }
 
 
   async assertCountAllDataRow(count: number) {
-    await expect(this.countRowsOnPage).toBe(count)
-    await expect(this.dataRows).toHaveCount(count)
+    await expect(this.$countRowsOnPageListBox).toHaveValue(String(count))
+    await expect(this.$allRows).toHaveCount(count)
   }
 
 
