@@ -30,17 +30,19 @@ test.describe("Web tables tests", () => {
     }
 
     for (let num of [3,2,1]) {
-        test(`Delete one row number: ${num}`, async ({ webTablesPage }) => {
+        test.only(`Delete one row number: ${num}`, async ({ webTablesPage }) => {
             const countRow = await webTablesPage.$dataRows.count();
             await webTablesPage.deleteRowFromGrid(num)
+            // await webTablesPage.page.waitForTimeout(3000)
             await expect(webTablesPage.$dataRows).toHaveCount(countRow-1)
         });
     }
 
-    test(` Delete all start row `, async ({ webTablesPage }) => {
+    test.only(` Delete all start row `, async ({ webTablesPage }) => {
         const countRow = await webTablesPage.$dataRows.count();
         for (let num = countRow; num >= 1; num--) {
             await webTablesPage.deleteRowFromGrid(num)
+            // await webTablesPage.page.waitForTimeout(3000)
             await expect(webTablesPage.$dataRows).toHaveCount(num-1)
         }
     });
@@ -71,7 +73,7 @@ test.describe("Web tables tests", () => {
     //     });
     // }
 
-    
+
     // test(` Check listbox `, async ({ webTablesPage }) => {
     //     const result1 = await webTablesPage.$countRowsOnPageListBox.allInnerTexts();
     //     console.log(result1)
