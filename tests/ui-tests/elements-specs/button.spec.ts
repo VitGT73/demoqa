@@ -1,13 +1,7 @@
 import { test, expect } from "../../fixtures/elements.fixture";
-// import { TextboxRandomData } from '../../testdata/elements/textbox.data';
 
-// let data = new TextboxRandomData();
-
-// test.describe.configure({ mode: 'serial' });
 test.describe("Buttons tests", () => {
-    // test.beforeAll( async ()=>{
-    //     let data = new TextboxRandomData;
-    // })
+
     test("Button page has header ", async ({ buttonPage }) => {
         await buttonPage.header.selectText;
         await buttonPage.assertPageHeader();
