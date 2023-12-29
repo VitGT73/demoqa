@@ -6,10 +6,12 @@ import {
   parseSingleWebTableRow,
   parseWebTableRows,
   webTableContainsThisElement,
+  webTableContainsThisArray,
   countRowAllowedValues,
   headerNames,
 
 } from '../../../interfaces/webtables.interface'
+import { count } from 'console';
 // import { assert } from 'console';
 
 export class WebTablesExample {
@@ -78,8 +80,8 @@ export class WebTablesExample {
     // this.columnHeaderNames = ['First Name', 'Age', 'Email', 'Last Name', 'Salary', 'Department', 'Action'];
     this.columnHeaders = this.createColumnHeaders(headerNames);
     // this.countRowsOnPage = 10;
-    this.allRowsList ={} //this.reNewAllRows()
-    this.dataRowsList ={} //this.reNewDataRows() // 2
+    this.allRowsList = {} //this.reNewAllRows()
+    this.dataRowsList = {} //this.reNewDataRows() // 2
 
     // this.initialize();
 
@@ -93,7 +95,7 @@ export class WebTablesExample {
   // }
 
 
-   public async reNewAllRows() {  //Record<number, AnyRow> {
+  public async reNewAllRows() {  //Record<number, AnyRow> {
     const rows: Record<number, AnyRow> = {};
     const countRows = await this.getCountRowsOnPage()
     //const countRows = 10
@@ -104,7 +106,7 @@ export class WebTablesExample {
     this.allRowsList = rows;
   }
 
-//   public async reNewDataRows(): Promise<Record<number, DataRow>> {
+  //   public async reNewDataRows(): Promise<Record<number, DataRow>> {
   public async reNewDataRows() {
     const rows: Record<number, DataRow> = {};
     const countRows = await this.getCountDataRowsOnPage()
@@ -117,27 +119,23 @@ export class WebTablesExample {
     this.dataRowsList = rows;
   }
   private async getCountDataRowsOnPage(): Promise<number> {
-    // const count = 10
-    // const count = await this.$countRowsOnPageListBox.inputValue()
-    // await expect(this.$countRowsOnPageListBox).toHaveValue(String(10))
+    const countRow = await this.getCountRowsOnPage()
+    await expect(this.$allRows).toHaveCount(countRow)
     const count = await this.$dataRows.count();
     return count;
   }
 
   private async getCountRowsOnPage(): Promise<number> {
-    // const count = 10
-    // const count = await this.$countRowsOnPageListBox.inputValue()
-    // await expect(this.$countRowsOnPageListBox).toHaveValue(String(10))
     const count = await this.page.getByLabel('rows per page').inputValue();
     return Number(count);
   }
 
-  public async deleteRowFromGrid(num: number){
+  public async deleteRowFromGrid(num: number) {
     await this.reNewDataRows();
     const keysList = Object.keys(this.dataRowsList);
     if (keysList.includes(num.toString())) {
-        this.dataRowsList[num].$deleteButton.click()
-        await this.reNewDataRows();
+      this.dataRowsList[num].$deleteButton.click()
+      await this.reNewDataRows();
     }
   }
 
@@ -169,13 +167,35 @@ export class WebTablesExample {
     await this.page.goto(this.url, { waitUntil: 'domcontentloaded' });
   }
 
+  async gotoPageN(num: number){
+    await this.$pageNumberInput.fill(String(num))
+    await this.page.keyboard.press('Enter');
+  }
+
+
+  async clickNext() {
+    await this.$nextButton.click()
+    await this.reNewDataRows();
+    await this.reNewAllRows();
+  }
+
+  async clickPrev() {
+    await this.$previousButton.click()
+    await this.reNewDataRows();
+    await this.reNewAllRows();
+  }
+  2
+  async getCountPage() {
+    const count = await this.$pageTotalText.textContent()
+    return Number(count)
+  }
 
 
   async getPersonsFromWebTable(): Promise<WebTableInterface[]> {
-    const count = await this.getCountRowsOnPage()
-    await expect(this.$allRows).toHaveCount(count)
-    const gridText = await this.$allRows.allInnerTexts()
-    const result = parseWebTableRows(gridText)
+    const count = await this.getCountDataRowsOnPage()
+    await expect(this.$dataRows).toHaveCount(count)
+    const dataText = await this.$dataRows.allInnerTexts()
+    const result = parseWebTableRows(dataText)
     return result;
   }
 
@@ -214,10 +234,42 @@ export class WebTablesExample {
   //   return tableData;
   // }
 
-  async addOnePerson(person:WebTableInterface){
+  async addOnePerson(person: WebTableInterface) {
+    await this.$addButton.click()
+    await this.regForm.FillForm(person);
+    await this.reNewDataRows();
+    await this.reNewAllRows();
+  }
+
+  private async addOnePersonFast(person: WebTableInterface) {
     await this.$addButton.click()
     await this.regForm.FillForm(person);
   }
+
+
+  async addMultiplePersons(persons: WebTableInterface[]) {
+    for (let person of persons) {
+        await this.addOnePersonFast(person);
+        // console.log('Adding:', person)
+    }
+    await this.reNewDataRows();
+    await this.reNewAllRows();
+  }
+
+  async getAllPersons():Promise<WebTableInterface[]>{
+    const count = await this.getCountPage()
+    let allPerson: WebTableInterface[] = []
+    for (let i = 1; i <= count;i++){
+      await this.gotoPageN(i);
+      const arr = await this.getPersonsFromWebTable()
+      // console.log('Page: ', i, 'arr.length', arr.length)
+      allPerson=allPerson.concat(arr)
+      // console.log('allPerson.length', allPerson.length)
+    }
+    return allPerson
+  }
+
+
 
   async assertPageHeader() {
     await expect(this.$header).toHaveText(this.headerText);
@@ -229,9 +281,27 @@ export class WebTablesExample {
 
   async assertAddedPersonInTheTable(addedPerson: WebTableInterface) {
     const person = addedPerson;
+    const countPage = await this.getCountPage()
+    let currentPage = await this.$pageNumberInput.inputValue()
+    // console.log(currentPage, countPage)
+    while (Number(currentPage) < countPage) {
+      this.clickNext()
+      currentPage = await this.$pageNumberInput.inputValue()
+    }
     const webTableData = await this.getPersonsFromWebTable()
+
     const result = webTableContainsThisElement(webTableData, person);
     await expect(result).toBeTruthy();
+  }
+
+  async assertAddedMultiplePersonsInTheTable(addedPersons: WebTableInterface[]){
+    const allPersons= await this.getAllPersons();
+    // console.log('allPerson: ', allPersons.length)
+    // console.log('addedPerson: ', addedPersons.length)
+    const result = await webTableContainsThisArray(allPersons,addedPersons)
+    // console.log('result: ',result)
+    await expect(result).toBeTruthy()
+    // return result
   }
 
   async assertCountAllRowOnPage(count: number) {

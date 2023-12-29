@@ -1,7 +1,7 @@
 import { test, expect } from "../../fixtures/elements.fixture";
 import { WebTablesRandomData } from '../../testdata/elements/webtables.data';
-import { countRowAllowedValues } from '../../interfaces/webtables.interface';
-import { count } from "console";
+import { countRowAllowedValues, WebTableInterface } from '../../interfaces/webtables.interface';
+import { count, time } from "console";
 
 let data = new WebTablesRandomData();
 
@@ -30,7 +30,7 @@ test.describe("Web tables tests", () => {
     }
 
     for (let num of [3,2,1]) {
-        test.only(`Delete one row number: ${num}`, async ({ webTablesPage }) => {
+        test(`Delete one row number: ${num}`, async ({ webTablesPage }) => {
             const countRow = await webTablesPage.$dataRows.count();
             await webTablesPage.deleteRowFromGrid(num)
             // await webTablesPage.page.waitForTimeout(3000)
@@ -38,7 +38,7 @@ test.describe("Web tables tests", () => {
         });
     }
 
-    test.only(` Delete all start row `, async ({ webTablesPage }) => {
+    test(` Delete all start row `, async ({ webTablesPage }) => {
         const countRow = await webTablesPage.$dataRows.count();
         for (let num = countRow; num >= 1; num--) {
             await webTablesPage.deleteRowFromGrid(num)
@@ -48,22 +48,17 @@ test.describe("Web tables tests", () => {
     });
 
     test("Add one Person with valid data", async ({ webTablesPage }) => {
-        let person = data.getWebTableData();
-        await webTablesPage.$addButton.click()
-        await webTablesPage.regForm.FillForm(person);
+        let person = data.getPerson();
+        await webTablesPage.addOnePerson(person);
         await webTablesPage.assertAddedPersonInTheTable(person)
         // await webTablesPage.assertAddedPersonInTheTable(person)
     });
 
-    test.fixme("Add 12 Person with valid data", async ({ webTablesPage }) => {
-        let person
-        for (let i = 1; i < 15; i++) {
-            person = data.getWebTableData()
-            // console.log('Person in test: ',person)
-            await webTablesPage.regForm.FillForm(person);
-        }
-        await webTablesPage.assertAddedPersonInTheTable(person)
-        // await webTablesPage.assertAddedPersonInTheTable(person)
+    // for (let num of [45,25,12]) {
+    test("Add Multiple Persons with valid data", async ({ webTablesPage }) => {
+        let persons = data.getMultiplePersons(25);
+        await webTablesPage.addMultiplePersons(persons);
+        await webTablesPage.assertAddedMultiplePersonsInTheTable(persons)
     });
 
     // for (const headerName of headerNames) {

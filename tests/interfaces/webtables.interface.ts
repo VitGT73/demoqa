@@ -67,7 +67,6 @@ export function webTablesFilter(data: WebTableInterface[], filterString: string)
         for (const key in item) {
             if (item.hasOwnProperty(key)) {
                 const value = String(item[key]); // Преобразование числовых полей в строки
-
                 if (value.includes(filterString)) {
                     return true;
                 }
@@ -87,6 +86,28 @@ export function webTableContainsThisElement(array: WebTableInterface[], element:
         item.department === element.department
     );
 }
+
+export function webTableContainsThisArray(mainArray: WebTableInterface[], subArray: WebTableInterface[]): boolean {
+    if (mainArray.length === 0) {
+        // Если mainArray пуст, subArray не может быть подмножеством, возвращаем false
+        return false;
+    }
+    const isSubset: boolean = subArray.every(item1 =>
+        mainArray.some(item2 =>
+            item1.firstName === item2.firstName &&
+            item1.lastName === item2.lastName &&
+            item1.age === item2.age &&
+            item1.email === item2.email &&
+            item1.salary === item2.salary &&
+            item1.department === item2.department
+        )
+    );
+    return isSubset
+}
+
+export function getFirstNElements<T>(arr: T[], n: number): T[] {
+    return arr.slice(0, n);
+  }
 
 // // Пример использования:
 // const data: WebTableInterface[] = [
@@ -156,5 +177,6 @@ export function parseWebTableRows(rows: string[]): WebTableInterface[] {
         }
     }
     // console.log('parsedRows: ',parsedRows)
+
     return parsedRows;
 }

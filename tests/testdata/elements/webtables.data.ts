@@ -122,7 +122,7 @@ export class WebTablesRandomData {
     }
   }
 
-  getWebTableData(): WebTableInterface {
+  getPerson(): WebTableInterface {
     const data: WebTableInterface = {
       firstName: this.getFirstName(true),
       lastName: this.getLastName(true),
@@ -131,12 +131,21 @@ export class WebTablesRandomData {
       salary: this.getSalary(true),
       department: this.getDepartment(true)
     };
-
     return data;
+  }
+  getMultiplePersons(count: number): WebTableInterface[] {
+    const persons : WebTableInterface[]=[];
+    let person : WebTableInterface;
+    for (let i = 1; i <= count; i++){
+      person = this.getPerson();
+      persons.push(person)
+
+    }
+    return persons;
   }
 
 
-  getNoValidWebTableData(parameter: string): noValidWebTableInterface {
+  getNoValidPerson(parameter: string): noValidWebTableInterface {
     // Только одна функция вызывается с параметром false, остальные с true
     const isTrueForParameter = (param: string): boolean => param === parameter;
 

@@ -39,7 +39,7 @@ test.describe("Web Tables. Registration Form.", () => {
 
 
         test("Click 'Submit' after Fill Form valid data", async ({ webTablesPage }) => {
-            const person = data.getWebTableData()
+            const person = data.getPerson()
             // console.log('Person in test: ',person)
             await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertFormIsVisible(false);
@@ -62,37 +62,37 @@ test.describe("Web Tables. Registration Form.", () => {
         });
 
         test("All data valid except First Name", async ({ webTablesPage }) => {
-            const person = data.getNoValidWebTableData('First Name')
+            const person = data.getNoValidPerson('First Name')
             await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertOneFieldRedOtherGreen('First Name')
         });
 
         test("All data valid except Last Name", async ({ webTablesPage }) => {
-            const person = data.getNoValidWebTableData('Last Name')
+            const person = data.getNoValidPerson('Last Name')
             await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertOneFieldRedOtherGreen('Last Name')
         });
 
         test("All data valid except Email", async ({ webTablesPage }) => {
-            const person = data.getNoValidWebTableData('Email')
+            const person = data.getNoValidPerson('Email')
             await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertOneFieldRedOtherGreen('Email')
         });
 
         test("All data valid except Age", async ({ webTablesPage }) => {
-            const person = data.getNoValidWebTableData('Age')
+            const person = data.getNoValidPerson('Age')
             await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertOneFieldRedOtherGreen('Age')
         });
 
         test("All data valid except Salary", async ({ webTablesPage }) => {
-            const person = data.getNoValidWebTableData('Salary')
+            const person = data.getNoValidPerson('Salary')
             await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertOneFieldRedOtherGreen('Salary')
         });
 
         test("All data valid except Department", async ({ webTablesPage }) => {
-            const person = data.getNoValidWebTableData('Department')
+            const person = data.getNoValidPerson('Department')
             await webTablesPage.regForm.FillForm(person);
             await webTablesPage.regForm.assertOneFieldRedOtherGreen('Department')
         });
