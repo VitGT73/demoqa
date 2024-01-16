@@ -15,8 +15,9 @@
     "test:api": "npx playwright test tests/api --project=api",
     "test:smoke": "npx playwright test tests/ --grep @smoke --project=chromium",
     "test:non-smoke": "npx playwright test tests/ --grep-invert @smoke --project=chromium",
-    "test:me": "npx playwright test me.spec.ts --project=chromium",
+    "test:me": "npx playwright test aaa.spec.ts --project=chromium",
     "test:one": "npx playwright test login.spec.ts --headed --project=chromium"
+
   },
   "keywords": [],
   "author": "",
